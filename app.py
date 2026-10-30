@@ -1,4 +1,13 @@
-
+"""
+================================================================================
+COURSE: Python Programming for Business Students
+PROJECT: End-Term Project & Assignment 2
+TOPIC: Life Insurance Premium Estimator (Business Idea #16)
+EDITION: Calm Minimalist Single-Page Edition (Zero Tabs, Gentle on Eyes)
+================================================================================
+"""
+import streamlit as st
+import datetime
 # -----------------------------------------------------------------------------
 # 1. PAGE SETUP & CALM MINIMALIST CSS
 # -----------------------------------------------------------------------------
