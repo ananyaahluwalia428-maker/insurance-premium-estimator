@@ -2,183 +2,139 @@
 ================================================================================
 COURSE: Python Programming for Business Students
 PROJECT: End-Term Project & Assignment 2
-TOPIC: Life Insurance Premium Estimator & Quote Engine (Business Idea #16)
-BRAND: Aegis Shield Life Insurance Co. Ltd. (IRDAI Reg. No. 142)
-EDITION: Minimalist, De-Cluttered & Wide-Scrollbar Edition
+TOPIC: Life Insurance Premium Estimator (Business Idea #16)
+EDITION: Calm Minimalist Single-Page Edition (Zero Tabs, Gentle on Eyes)
 ================================================================================
 """
 
 import streamlit as st
 import datetime
-import pandas as pd
 
 # -----------------------------------------------------------------------------
-# 1. PAGE CONFIGURATION & CLEAN FINTECH CSS (DE-CLUTTERED + WIDE SCROLLBAR)
+# 1. PAGE SETUP & CALM MINIMALIST CSS
 # -----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="Aegis Shield Life | Clean Insurance Quote",
+    page_title="Aegis Life | Premium Estimator",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom Clean Styling: Generous whitespace, de-cluttered cards & wider scrollbars
+# Soft, eye-friendly styling: neutral whites, subtle greys, gentle typography
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
     
     html, body, [class*="css"] {
         font-family: 'Plus Jakarta Sans', sans-serif;
+        color: #1E293B;
     }
-    
+
     /* ---------------------------------------------------------
-       1. ENHANCED & WIDER SCROLLBAR (MAIN PAGE & SIDEBAR)
+       1. WIDE, EASY-TO-GRAB SCROLLBAR
        --------------------------------------------------------- */
     ::-webkit-scrollbar {
         width: 14px !important;
         height: 14px !important;
     }
     ::-webkit-scrollbar-track {
-        background: #F1F5F9 !important;
-        border-radius: 8px !important;
+        background: #F8FAFC !important;
     }
     ::-webkit-scrollbar-thumb {
-        background: #94A3B8 !important;
+        background: #CBD5E1 !important;
         border-radius: 8px !important;
-        border: 3px solid #F1F5F9 !important;
+        border: 3px solid #F8FAFC !important;
     }
     ::-webkit-scrollbar-thumb:hover {
-        background: #475569 !important;
+        background: #94A3B8 !important;
     }
     * {
         scrollbar-width: auto !important;
-        scrollbar-color: #94A3B8 #F1F5F9 !important;
+        scrollbar-color: #CBD5E1 #F8FAFC !important;
     }
 
     /* ---------------------------------------------------------
-       2. MINIMALIST SEGMENTED TABS (CLEAN & SPACIOUS)
+       2. CALM, MINIMALIST HEADER
        --------------------------------------------------------- */
-    div[data-baseweb="tab-list"] {
-        gap: 12px;
-        background-color: #F8FAFC;
-        padding: 6px;
-        border-radius: 12px;
-        border: 1px solid #E2E8F0;
-        margin-bottom: 24px;
-    }
-    div[data-baseweb="tab"] {
-        height: 42px;
-        border-radius: 8px;
-        padding: 6px 20px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: #475569;
-        background-color: transparent;
-        border: none !important;
-        transition: all 0.2s ease;
-    }
-    div[data-baseweb="tab"]:hover {
-        color: #0F172A;
-        background-color: #EDF2F7;
-    }
-    div[aria-selected="true"] {
-        background-color: #FFFFFF !important;
-        color: #1E40AF !important;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08) !important;
-        font-weight: 700 !important;
-    }
-    div[data-baseweb="tab-border"], div[data-baseweb="tab-highlight"] {
-        display: none;
-    }
-
-    /* ---------------------------------------------------------
-       3. DE-CLUTTERED MINIMALIST HEADER
-       --------------------------------------------------------- */
-    .clean-header {
-        background: #0F172A;
-        border-radius: 12px;
-        padding: 20px 26px;
-        color: white;
+    .calm-header {
+        padding: 16px 0 20px 0;
+        border-bottom: 1px solid #E2E8F0;
         margin-bottom: 24px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 14px;
     }
-    .header-brand {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 1.55rem;
+    .calm-title {
+        font-size: 1.45rem;
         font-weight: 700;
+        color: #0F172A;
         letter-spacing: -0.02em;
+        margin: 0;
     }
-    .header-subtext {
+    .calm-subtitle {
         font-size: 0.85rem;
-        color: #94A3B8;
-        margin-top: 3px;
+        color: #64748B;
+        margin-top: 4px;
     }
-    .header-link-pill {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #F8FAFC !important;
-        padding: 6px 14px;
-        border-radius: 20px;
+    .calm-badge {
         font-size: 0.8rem;
-        font-weight: 600;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-    }
-    .header-link-pill:hover {
-        background: rgba(255, 255, 255, 0.2);
+        color: #475569;
+        background: #F1F5F9;
+        border: 1px solid #E2E8F0;
+        padding: 4px 12px;
+        border-radius: 20px;
     }
 
     /* ---------------------------------------------------------
-       4. HERO PRICE DISPLAY (CLEAN FINTECH LOOK)
+       3. GENTLE HERO PRICE CARD (NO EYE-STRAIN)
        --------------------------------------------------------- */
-    .minimal-price-card {
-        background: #F0FDF4;
-        border: 1px solid #BBF7D0;
+    .hero-price-card {
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
         border-radius: 12px;
-        padding: 22px;
+        padding: 22px 24px;
         margin-bottom: 20px;
     }
-    .minimal-price-label {
-        font-size: 0.78rem;
+    .hero-price-label {
+        font-size: 0.8rem;
         text-transform: uppercase;
-        font-weight: 700;
-        color: #166534;
+        font-weight: 600;
+        color: #64748B;
         letter-spacing: 0.05em;
         margin-bottom: 4px;
     }
-    .minimal-price-value {
+    .hero-price-value {
         font-size: 2.3rem;
-        font-weight: 800;
-        color: #14532D;
-        line-height: 1.1;
+        font-weight: 700;
+        color: #0F172A;
+        line-height: 1.15;
+    }
+    .hero-price-note {
+        font-size: 0.82rem;
+        color: #10B981;
+        margin-top: 6px;
+        font-weight: 500;
     }
 
     /* ---------------------------------------------------------
-       5. CLEAN CARDS & CALLOUTS
+       4. SOFT INFORMATION BOXES
        --------------------------------------------------------- */
-    .clean-card {
+    .soft-card {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
-        border-radius: 12px;
-        padding: 18px;
+        border-radius: 10px;
+        padding: 16px 18px;
         margin-bottom: 16px;
     }
-    .tax-box {
-        background: #EFF6FF;
-        border-left: 4px solid #3B82F6;
-        padding: 12px 16px;
-        border-radius: 6px;
+    .soft-tax-note {
+        background: #F8FAFC;
+        border-left: 3px solid #3B82F6;
+        padding: 10px 14px;
+        border-radius: 4px;
         font-size: 0.85rem;
-        color: #1E40AF;
-        margin-bottom: 20px;
+        color: #334155;
+        margin-bottom: 18px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -188,31 +144,31 @@ st.markdown("""
 # 2. ACTUARIAL BASE DATA
 # -----------------------------------------------------------------------------
 BASE_RATES_PER_LAKH = {
-    "Term Life (i-Protect Pure Protection)": 110.0,
-    "Endowment Plan (Guaranteed Returns)": 480.0,
-    "Whole Life Shield (Lifelong 99 Yrs)": 260.0,
+    "Term Life (Pure Protection)": 110.0,
+    "Endowment Plan (Savings + Protection)": 480.0,
+    "Whole Life Shield (Coverage till 99 Yrs)": 260.0,
     "Child Future Plan (Education Milestone)": 390.0
 }
 
-PLAN_SUMMARIES = {
-    "Term Life (i-Protect Pure Protection)": "Pure risk protection. Highest sum assured at the lowest rate, with 100% tax-free payout to nominee.",
-    "Endowment Plan (Guaranteed Returns)": "Disciplined savings with guaranteed capital returns and maturity bonuses plus life cover.",
-    "Whole Life Shield (Lifelong 99 Yrs)": "Permanent family legacy cover active up to age 99, passing accumulated corpus to legal heirs.",
-    "Child Future Plan (Education Milestone)": "Secures college milestones with an automatic premium waiver if the parent passes away."
+PLAN_DESCRIPTIONS = {
+    "Term Life (Pure Protection)": "Affordable, high-coverage protection. Pays full sum assured to your nominee in case of untimely demise.",
+    "Endowment Plan (Savings + Protection)": "Combines life insurance with disciplined savings, providing a guaranteed maturity corpus plus life cover.",
+    "Whole Life Shield (Coverage till 99 Yrs)": "Lifelong peace of mind covering you up to age 99, passing an accumulated legacy to your heirs.",
+    "Child Future Plan (Education Milestone)": "Funds key educational milestones for your child, with automatic waiver of future premiums if the parent passes away."
 }
 
 FREQUENCY_FACTORS = {
-    "Annual (1 payment/year)": 1.0,
-    "Monthly (12 payments/year)": 0.088,
-    "Quarterly (4 payments/year)": 0.26,
-    "Semi-Annual (2 payments/year)": 0.51
+    "Annual Mode (1 payment/year)": 1.0,
+    "Monthly Mode (12 payments/year)": 0.088,
+    "Quarterly Mode (4 payments/year)": 0.26,
+    "Semi-Annual Mode (2 payments/year)": 0.51
 }
 
 GST_RATE = 0.18
 
 
 # -----------------------------------------------------------------------------
-# 3. CORE ACTUARIAL CALCULATION FUNCTION
+# 3. CORE CALCULATION LOGIC (PYTHON ARITHMETIC & CONDITIONALS)
 # -----------------------------------------------------------------------------
 def calculate_insurance_premium(
     policy_type: str,
@@ -220,7 +176,6 @@ def calculate_insurance_premium(
     age: int,
     policy_term: int,
     gender: str,
-    annual_income: int,
     is_smoker: bool,
     has_critical_illness: bool,
     has_accidental_death: bool,
@@ -228,11 +183,12 @@ def calculate_insurance_premium(
     frequency: str,
     direct_online_discount: bool
 ):
+    """Computes premium with age factors, lifestyle surcharges, riders, and GST."""
     sum_assured_units = sum_assured / 100000.0
     base_rate = BASE_RATES_PER_LAKH[policy_type]
     base_premium = base_rate * sum_assured_units
 
-    # Age band multipliers
+    # Age band multipliers (conditional logic)
     if age < 25:
         age_factor = 0.85
     elif 25 <= age <= 35:
@@ -248,6 +204,7 @@ def calculate_insurance_premium(
     smoker_loading = (adjusted_premium * 0.40) if is_smoker else 0.0
     gender_discount = (adjusted_premium * 0.10) if gender == "Female" else 0.0
 
+    # Policy term factor
     if policy_term > 25:
         term_factor = 1.05
     elif policy_term < 15:
@@ -257,7 +214,7 @@ def calculate_insurance_premium(
 
     net_base_premium = (adjusted_premium + smoker_loading - gender_discount) * term_factor
 
-    # Riders
+    # Protection riders
     critical_illness_cost = (25.0 * sum_assured_units) if has_critical_illness else 0.0
     accidental_death_cost = (15.0 * sum_assured_units) if has_accidental_death else 0.0
     waiver_premium_cost = (net_base_premium * 0.03) if has_premium_waiver else 0.0
@@ -267,12 +224,13 @@ def calculate_insurance_premium(
     online_rebate = (subtotal_pre_discount * 0.05) if direct_online_discount else 0.0
     subtotal_annual = subtotal_pre_discount - online_rebate
 
+    # 18% GST and modal frequency
     gst_amount = subtotal_annual * GST_RATE
     total_annual_premium = subtotal_annual + gst_amount
     installment_premium = total_annual_premium * FREQUENCY_FACTORS[frequency]
 
     eligible_80c = min(total_annual_premium, 150000.0)
-    tax_savings_estimate = eligible_80c * 0.312
+    tax_savings_estimate = eligible_80c * 0.312  # approx 30% slab saving
 
     return {
         "base_premium": base_premium,
@@ -295,42 +253,36 @@ def calculate_insurance_premium(
 
 
 # -----------------------------------------------------------------------------
-# 4. DE-CLUTTERED CORPORATE HEADER
+# 4. GENTLE & MINIMALIST HEADER (NO FLASHY BANNERS)
 # -----------------------------------------------------------------------------
 st.markdown("""
-<div class="clean-header">
+<div class="calm-header">
     <div>
-        <div class="header-brand">
-            <span>🛡️</span> Aegis Shield Life Insurance
-        </div>
-        <div class="header-subtext">
-            IRDAI Reg. No. 142 • 99.34% Claim Settlement Ratio • Over 2.8 Cr Families Protected
-        </div>
+        <div class="calm-title">🛡️ Aegis Life Insurance</div>
+        <div class="calm-subtitle">Simple, transparent premium calculation with instant itemized quotes</div>
     </div>
-    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-        <span style="font-size: 0.88rem; color: #E2E8F0;">📞 1800-266-7788</span>
-        <a href="http://localhost:8501" target="_blank" class="header-link-pill">
-            🪟 Open in New Tab ↗
-        </a>
+    <div style="display: flex; gap: 8px; align-items: center;">
+        <span class="calm-badge">IRDAI Reg. 142</span>
+        <span class="calm-badge">99.3% Claim Ratio</span>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
 
 # -----------------------------------------------------------------------------
-# 5. SIDEBAR: CLEAN INPUT CONFIGURATOR
+# 5. SIDEBAR CONFIGURATOR (CLEAN, UNCLUTTERED INPUTS)
 # -----------------------------------------------------------------------------
-st.sidebar.markdown("### 📋 Quote Configurator")
+st.sidebar.markdown("### 📋 Your Details")
 
 applicant_name = st.sidebar.text_input("Full Name", value="Rahul Sharma")
 
 col_sb1, col_sb2 = st.sidebar.columns(2)
 with col_sb1:
-    age = st.number_input("Age", min_value=18, max_value=65, value=29)
+    age = st.sidebar.number_input("Age", min_value=18, max_value=65, value=29)
 with col_sb2:
-    gender = st.radio("Gender", ["Male", "Female"], index=0)
+    gender = st.sidebar.radio("Gender", ["Male", "Female"], index=0, horizontal=True)
 
-policy_type = st.sidebar.selectbox("Insurance Plan", list(BASE_RATES_PER_LAKH.keys()), index=0)
+policy_type = st.sidebar.selectbox("Choose Plan", list(BASE_RATES_PER_LAKH.keys()), index=0)
 
 sum_assured_options = [1000000, 2500000, 5000000, 7500000, 10000000, 15000000, 20000000]
 sum_assured_labels = {
@@ -343,7 +295,7 @@ sum_assured_labels = {
     20000000: "₹2 Crores"
 }
 sum_assured = st.sidebar.select_slider(
-    "Life Cover (Sum Assured)",
+    "Coverage Amount (Sum Assured)",
     options=sum_assured_options,
     value=10000000,
     format_func=lambda x: sum_assured_labels[x]
@@ -366,23 +318,14 @@ frequency = st.sidebar.selectbox("Payment Frequency", list(FREQUENCY_FACTORS.key
 
 
 # -----------------------------------------------------------------------------
-# 6. STREAMLINED, DE-CLUTTERED TABS (4 CLEAN TABS)
+# 6. MAIN SINGLE-PAGE OUTPUT (ZERO TABS - DIRECT, CALM FLOW)
 # -----------------------------------------------------------------------------
-tab_quote, tab_family, tab_compare, tab_academic = st.tabs([
-    "⚡ Instant Quote",
-    "👨‍👩‍👧 Family Plans (Multi-Tab)",
-    "⚖️ Plan Comparison",
-    "🎓 Student Project & Logic"
-])
-
-# Compute primary quote
 calc = calculate_insurance_premium(
     policy_type=policy_type,
     sum_assured=sum_assured,
     age=age,
     policy_term=policy_term,
     gender=gender,
-    annual_income=1200000,
     is_smoker=is_smoker,
     has_critical_illness=rider_critical,
     has_accidental_death=rider_accidental,
@@ -391,102 +334,97 @@ calc = calculate_insurance_premium(
     direct_online_discount=direct_discount
 )
 
-# -----------------------------------------------------------------------------
-# TAB 1: INSTANT QUOTE (SPACIOUS & CLEAN)
-# -----------------------------------------------------------------------------
-with tab_quote:
-    # Selected Plan Summary Box
+# Plan Title & Description Card
+st.markdown(f"""
+<div class="soft-card">
+    <div style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 2px;">
+        {policy_type}
+    </div>
+    <div style="font-size: 0.88rem; color: #64748B;">
+        {PLAN_DESCRIPTIONS[policy_type]}
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# Hero Price Card & Summary Metrics
+c_price, c_m1, c_m2, c_m3 = st.columns([1.6, 1, 1, 1])
+
+with c_price:
+    freq_label = frequency.split(" (")[0]
     st.markdown(f"""
-    <div class="clean-card" style="border-left: 4px solid #2563EB;">
-        <div style="font-size: 1.15rem; font-weight: 700; color: #1E3A8A; margin-bottom: 2px;">
-            {policy_type}
-        </div>
-        <div style="font-size: 0.88rem; color: #4B5563;">
-            {PLAN_SUMMARIES[policy_type]}
-        </div>
+    <div class="hero-price-card">
+        <div class="hero-price-label">{freq_label} Premium</div>
+        <div class="hero-price-value">₹{calc['installment_premium']:,.2f}</div>
+        <div class="hero-price-note">✓ Includes 18% GST • No hidden charges</div>
     </div>
     """, unsafe_allow_html=True)
 
-    # Hero Quote Row
-    col_price, col_m1, col_m2, col_m3 = st.columns([1.5, 1, 1, 1])
-    with col_price:
-        freq_title = frequency.split(" (")[0]
-        st.markdown(f"""
-        <div class="minimal-price-card">
-            <div class="minimal-price-label">{freq_title} Premium Payable</div>
-            <div class="minimal-price-value">₹{calc['installment_premium']:,.2f}</div>
-            <div style="font-size: 0.8rem; color: #166534; margin-top: 4px;">
-                ✓ Includes 18% GST • 0% Hidden Fees
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-    with col_m1:
-        st.metric("Daily Cost", f"₹{calc['daily_cost']:.1f} / day")
-    with col_m2:
-        st.metric("Annual Premium", f"₹{calc['total_annual_premium']:,.2f}")
-    with col_m3:
-        st.metric("Sec 80C Tax Saved", f"₹{calc['tax_savings_estimate']:,.0f}")
+with c_m1:
+    st.metric("Daily Equivalent", f"₹{calc['daily_cost']:.1f} / day")
+with c_m2:
+    st.metric("Total Annual Cost", f"₹{calc['total_annual_premium']:,.2f}")
+with c_m3:
+    st.metric("Sec 80C Tax Saved", f"₹{calc['tax_savings_estimate']:,.0f}")
 
-    # Tax Banner
+# Gentle Tax Note
+st.markdown(f"""
+<div class="soft-tax-note">
+    💼 <strong>Tax Advantage:</strong> Premiums qualify for tax deductions up to ₹1,50,000 under Section 80C. Nominee death benefit payouts are 100% tax-free under Section 10(10D).
+</div>
+""", unsafe_allow_html=True)
+
+# Itemized Breakdown & Chart Columns
+col_left, col_right = st.columns([3, 2])
+
+with col_left:
+    st.markdown("#### Itemized Cost Breakdown")
+    breakdown_data = [
+        {"Component": f"Base Mortality Cover ({sum_assured_labels[sum_assured]})", "Amount": f"₹{calc['base_premium']:,.2f}"},
+        {"Component": f"Age Multiplier ({calc['age_factor']}x for Age {age})", "Amount": f"₹{(calc['base_premium'] * (calc['age_factor'] - 1)):,.2f}" if calc['age_factor'] >= 1 else f"-₹{(calc['base_premium'] * (1 - calc['age_factor'])):,.2f}"},
+        {"Component": "Smoker Surcharge (+40%)", "Amount": f"₹{calc['smoker_loading']:,.2f}" if is_smoker else "₹0.00"},
+        {"Component": "Female Longevity Rebate (-10%)", "Amount": f"-₹{calc['gender_discount']:,.2f}" if gender == "Female" else "₹0.00"},
+        {"Component": "Net Underwritten Base Premium", "Amount": f"₹{calc['net_base_premium']:,.2f}"},
+        {"Component": "Add-on Riders Total", "Amount": f"₹{calc['rider_cost']:,.2f}"},
+        {"Component": "Online Direct Discount (-5%)", "Amount": f"-₹{calc['online_rebate']:,.2f}" if calc['online_rebate'] > 0 else "₹0.00"},
+        {"Component": "Pre-Tax Subtotal", "Amount": f"₹{calc['subtotal_annual']:,.2f}"},
+        {"Component": "GST (18%)", "Amount": f"₹{calc['gst_amount']:,.2f}"},
+        {"Component": "⭐ Total Annual Premium", "Amount": f"₹{calc['total_annual_premium']:,.2f}"}
+    ]
+    st.table(breakdown_data)
+
+with col_right:
+    st.markdown("#### Premium Composition")
+    st.bar_chart({
+        "Base Cover": calc['net_base_premium'],
+        "Riders": calc['rider_cost'],
+        "GST (18%)": calc['gst_amount']
+    })
+
+    quote_id = f"AGS-{age}{policy_term}-{abs(hash(applicant_name)) % 90000 + 10000}"
     st.markdown(f"""
-    <div class="tax-box">
-        💼 <strong>Tax Benefit:</strong> Eligible for up to <strong>₹1,50,000 deduction</strong> under Section 80C (saving ~₹{calc['tax_savings_estimate']:,.0f}/year in income tax). All death benefits to nominees are 100% tax-free under Section 10(10D).
+    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 12px 14px; border-radius: 8px; font-size: 0.82rem; margin-top: 10px;">
+        <strong>Quote Ref:</strong> <code>{quote_id}</code><br>
+        <strong>Applicant:</strong> {applicant_name} ({gender}, Age {age})<br>
+        <strong>Term:</strong> {policy_term} Years (Active till age {age + policy_term})
     </div>
     """, unsafe_allow_html=True)
 
-    # Two Clean Columns: Invoice & Visual Breakdown
-    col_table, col_chart = st.columns([3, 2])
-    with col_table:
-        st.markdown("#### 📑 Itemized Premium Breakdown")
-        breakdown_items = [
-            {"Component": f"Base Mortality Cover ({sum_assured_labels[sum_assured]})", "Amount": f"₹{calc['base_premium']:,.2f}"},
-            {"Component": f"Age Factor ({calc['age_factor']}x for Age {age})", "Amount": f"₹{(calc['base_premium'] * (calc['age_factor'] - 1)):,.2f}" if calc['age_factor'] >= 1 else f"-₹{(calc['base_premium'] * (1 - calc['age_factor'])):,.2f}"},
-            {"Component": "Smoker Risk Loading (+40%)", "Amount": f"₹{calc['smoker_loading']:,.2f}" if is_smoker else "₹0.00"},
-            {"Component": "Female Longevity Rebate (-10%)", "Amount": f"-₹{calc['gender_discount']:,.2f}" if gender == "Female" else "₹0.00"},
-            {"Component": "Net Underwritten Base Premium", "Amount": f"₹{calc['net_base_premium']:,.2f}"},
-            {"Component": "Add-on Riders Total", "Amount": f"₹{calc['rider_cost']:,.2f}"},
-            {"Component": "Direct Online Discount (-5%)", "Amount": f"-₹{calc['online_rebate']:,.2f}" if calc['online_rebate'] > 0 else "₹0.00"},
-            {"Component": "Subtotal (Pre-Tax)", "Amount": f"₹{calc['subtotal_annual']:,.2f}"},
-            {"Component": "GST (18%)", "Amount": f"₹{calc['gst_amount']:,.2f}"},
-            {"Component": "⭐ Total Annual Premium", "Amount": f"₹{calc['total_annual_premium']:,.2f}"}
-        ]
-        st.table(breakdown_items)
-
-    with col_chart:
-        st.markdown("#### 📊 Premium Composition")
-        st.bar_chart({
-            "Net Base Cover": calc['net_base_premium'],
-            "Riders": calc['rider_cost'],
-            "GST (18%)": calc['gst_amount']
-        })
-
-        quote_code = f"AGS-{age}{policy_term}-{abs(hash(applicant_name)) % 90000 + 10000}"
-        
-        st.markdown(f"""
-        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 12px; border-radius: 8px; font-size: 0.82rem; margin-top: 8px;">
-            <strong>Quote Ref:</strong> <code>{quote_code}</code><br>
-            <strong>Applicant:</strong> {applicant_name} ({gender}, Age {age})<br>
-            <strong>Tenure:</strong> {policy_term} Years (Active till age {age + policy_term})
-        </div>
-        """, unsafe_allow_html=True)
-
-        st.write("")
-        btn_c1, btn_c2 = st.columns(2)
-        with btn_c1:
-            if st.button("🚀 Apply Now", type="primary", use_container_width=True):
-                st.balloons()
-                st.success("Application started! An underwriter will contact you.")
-        with btn_c2:
-            quote_text = f"""======================================================
-               AEGIS SHIELD LIFE INSURANCE QUOTE
+    st.write("")
+    b1, b2 = st.columns(2)
+    with b1:
+        if st.button("Apply for Policy", type="primary", use_container_width=True):
+            st.success(f"Application for quote {quote_id} received. Our representative will contact you.")
+    with b2:
+        quote_text = f"""======================================================
+               AEGIS LIFE INSURANCE QUOTE
 ======================================================
-Quote Ref    : {quote_code}
+Quote ID     : {quote_id}
 Date         : {datetime.date.today().strftime('%d-%b-%Y')}
 Applicant    : {applicant_name} ({gender}, Age {age})
 Plan         : {policy_type}
 Sum Assured  : {sum_assured_labels[sum_assured]}
 Duration     : {policy_term} Years
-Payment Mode : {frequency}
+Mode         : {frequency}
 ------------------------------------------------------
 Net Base     : ₹{calc['net_base_premium']:,.2f}
 Riders Total : ₹{calc['rider_cost']:,.2f}
@@ -495,173 +433,48 @@ Total Annual : ₹{calc['total_annual_premium']:,.2f}
 Installment  : ₹{calc['installment_premium']:,.2f}
 ======================================================
 """
-            st.download_button(
-                "📥 Download Quote",
-                data=quote_text,
-                file_name=f"Quote_{quote_code}.txt",
-                mime="text/plain",
-                use_container_width=True
-            )
+        st.download_button(
+            "Download Quote",
+            data=quote_text,
+            file_name=f"Quote_{quote_id}.txt",
+            mime="text/plain",
+            use_container_width=True
+        )
 
 # -----------------------------------------------------------------------------
-# TAB 2: MULTI-MEMBER FAMILY PLANS (CLEAN SUB-TABS)
+# 7. COLLAPSIBLE ACCORDIONS (KEEPS VIEW CLEAN FOR USER, ACCESSIBLE FOR PROFESSOR)
 # -----------------------------------------------------------------------------
-with tab_family:
-    st.markdown("### 👨‍👩‍👧 Family Coverage Builder")
-    st.markdown("Switch between family member tabs to configure individual policies:")
+st.write("---")
 
-    sub_self, sub_spouse, sub_child = st.tabs([
-        "👤 Primary Proposer (Self)",
-        "💍 Spouse Cover",
-        "👶 Child Education Plan"
-    ])
+with st.expander("⚖️ Plan Comparison & Guidelines"):
+    st.markdown("""
+    | Plan | Best Suited For | Maturity Benefit | Nominee Benefit |
+    |---|---|---|---|
+    | **Term Life** | Salaried employees & home loan borrowers | Nil (Lowest cost, maximum cover) | 100% Tax-Free Sum Assured |
+    | **Endowment Plan** | Conservative investors | Guaranteed Corpus + Bonuses | Full Sum Assured |
+    | **Whole Life Shield** | Generational estate & legacy planning | Cover active up to age 99 | Legacy inheritance |
+    | **Child Future Plan** | Parents of young children | Milestone college fund payouts | Sum Assured + Future premiums waived |
+    """)
 
-    with sub_self:
-        st.markdown(f"**Proposer:** {applicant_name} (Age {age}, {gender})")
-        sc1, sc2 = st.columns(2)
-        with sc1:
-            st.metric("Plan", policy_type)
-        with sc2:
-            st.metric("Annual Premium", f"₹{calc['total_annual_premium']:,.2f}")
-
-    with sub_spouse:
-        c_sp1, c_sp2, c_sp3 = st.columns(3)
-        with c_sp1:
-            spouse_name = st.text_input("Spouse Name", value="Pooja Sharma")
-            spouse_age = st.number_input("Spouse Age", 18, 60, 27)
-        with c_sp2:
-            spouse_sum = st.selectbox("Spouse Cover", [2500000, 5000000, 10000000], index=1, format_func=lambda x: f"₹{x/100000:.0f} Lakhs")
-            spouse_term = st.slider("Tenure", 10, 35, 25)
-        with c_sp3:
-            spouse_smoker = st.checkbox("Spouse Smoker", value=False)
-            spouse_calc = calculate_insurance_premium(
-                policy_type="Term Life (i-Protect Pure Protection)",
-                sum_assured=spouse_sum,
-                age=spouse_age,
-                policy_term=spouse_term,
-                gender="Female",
-                annual_income=600000,
-                is_smoker=spouse_smoker,
-                has_critical_illness=True,
-                has_accidental_death=False,
-                has_premium_waiver=False,
-                frequency="Annual (1 payment/year)",
-                direct_online_discount=True
-            )
-            st.metric("Spouse Annual Premium", f"₹{spouse_calc['total_annual_premium']:,.2f}")
-
-    with sub_child:
-        c_ch1, c_ch2, c_ch3 = st.columns(3)
-        with c_ch1:
-            child_name = st.text_input("Child Name", value="Aarav Sharma")
-            child_age = st.number_input("Child Current Age", 0, 17, 4)
-        with c_ch2:
-            child_sum = st.selectbox("Education Fund Goal", [1500000, 2500000, 5000000], index=1, format_func=lambda x: f"₹{x/100000:.0f} Lakhs")
-            child_term = 18 - child_age
-        with c_ch3:
-            child_calc = calculate_insurance_premium(
-                policy_type="Child Future Plan (Education Milestone)",
-                sum_assured=child_sum,
-                age=32,
-                policy_term=child_term,
-                gender="Male",
-                annual_income=1200000,
-                is_smoker=False,
-                has_critical_illness=True,
-                has_accidental_death=True,
-                has_premium_waiver=True,
-                frequency="Annual (1 payment/year)",
-                direct_online_discount=True
-            )
-            st.metric("Child Plan Premium", f"₹{child_calc['total_annual_premium']:,.2f}")
-
-    st.write("---")
-    family_total = calc['total_annual_premium'] + spouse_calc['total_annual_premium'] + child_calc['total_annual_premium']
-    f_c1, f_c2 = st.columns(2)
-    with f_c1:
-        st.metric("Total Family Shield Annual Cost", f"₹{family_total:,.2f}")
-    with f_c2:
-        st.metric("Combined Family Protection", f"₹{(sum_assured + spouse_sum + child_sum)/10000000:.2f} Crores")
+with st.expander("🎓 Academic Project Details & Python Logic (For Course Evaluation)"):
+    st.markdown("""
+    **Course:** Python Programming for Business Students | **Idea #16:** Insurance Premium Estimator  
+    - **Variables & Types:** `int` (Age, Term), `float` (GST, Rates), `str` (Names, Plan), `bool` (Smoker, Riders)
+    - **Dictionaries:** `BASE_RATES_PER_LAKH`, `PLAN_DESCRIPTIONS`, `FREQUENCY_FACTORS`
+    - **Conditional Logic:** `if/elif/else` controlling age band mortality, smoking penalties, female longevity rebates
+    - **Formulas:**
+      $$\\text{Base} = \\left(\\frac{\\text{Sum Assured}}{100,000}\\right) \\times \\text{Rate}$$
+      $$\\text{Net Base} = (\\text{Base} \\times \\text{Age Factor} + \\text{Smoker Loading} - \\text{Female Rebate}) \\times \\text{Term Factor}$$
+      $$\\text{Total Premium} = (\\text{Net Base} + \\text{Riders} - \\text{Discount}) \\times 1.18_{\\text{GST}}$$
+    """)
 
 # -----------------------------------------------------------------------------
-# TAB 3: PLAN COMPARISON MATRIX
+# FOOTER
 # -----------------------------------------------------------------------------
-with tab_compare:
-    st.markdown("### ⚖️ Side-by-Side Product Comparison")
-    comp_df = pd.DataFrame([
-        {
-            "Plan": "Term Life (i-Protect)",
-            "Core Goal": "Pure Family Financial Defense",
-            "Maturity Proceeds": "Nil (Highest Protection / Lowest Cost)",
-            "Death Payout": "100% Tax-Free Sum Assured",
-            "Best For": "Salaried individuals, home loan borrowers"
-        },
-        {
-            "Plan": "Endowment Plan",
-            "Core Goal": "Protection + Compounding Wealth",
-            "Maturity Proceeds": "Guaranteed Corpus + Annual Bonuses",
-            "Death Payout": "Higher of Sum Assured or 105% premiums",
-            "Best For": "Conservative investors, retirement corpus"
-        },
-        {
-            "Plan": "Whole Life Shield",
-            "Core Goal": "Lifelong Heritage up to Age 99",
-            "Maturity Proceeds": "Active cover continues till age 99",
-            "Death Payout": "Guaranteed tax-free inheritance to heirs",
-            "Best For": "Generational wealth planning"
-        },
-        {
-            "Plan": "Child Future Plan",
-            "Core Goal": "College Education Guarantee",
-            "Maturity Proceeds": "Scheduled college milestone payouts",
-            "Death Payout": "Sum Assured + all future premiums waived",
-            "Best For": "Parents of children aged 0 to 12 years"
-        }
-    ])
-    st.dataframe(comp_df, use_container_width=True, hide_index=True)
-
-# -----------------------------------------------------------------------------
-# TAB 4: ACADEMIC PROJECT & LOGIC
-# -----------------------------------------------------------------------------
-with tab_academic:
-    st.markdown("### 🎓 Academic Evaluation: Python Programming for Business Students")
-    st.markdown("Documentation aligning directly with the assignment evaluation rubric:")
-
-    with st.expander("📖 1. Business Problem & Solution"):
-        st.markdown("""
-        - **Business Idea:** Idea #16 (Insurance - Life Insurance Premium Estimator)
-        - **Problem Solved:** Demystifies opaque insurance calculations, eliminating cart abandonment by providing transparent, real-time premium estimates.
-        - **Target Customer:** Working professionals, parents, and loan borrowers needing reliable financial security.
-        """)
-
-    with st.expander("💻 2. Python Concepts Applied"):
-        st.markdown("""
-        | Concept | Implementation in this App |
-        |---|---|
-        | **Variables & Types** | `int` (Age, Term), `float` (Rates, GST), `str` (Names, Plans), `bool` (Smoker, Riders) |
-        | **Dictionaries** | `BASE_RATES_PER_LAKH`, `FREQUENCY_FACTORS`, `PLAN_SUMMARIES` |
-        | **Conditional Logic** | `if/elif/else` for mortality age brackets, smoking loading, female discounts |
-        | **Arithmetic Operations** | Scaling per Lakh, adding riders, computing 18% GST, modal frequency factors |
-        | **Functions** | `calculate_insurance_premium(...)` encapsulating business algorithms with type hints |
-        """)
-
-    with st.expander("📐 3. Mathematical Equations"):
-        st.markdown(r"""
-        $$\text{Base Premium} = \left(\frac{\text{Sum Assured}}{100,000}\right) \times \text{Base Plan Rate}$$
-        $$\text{Net Base} = (\text{Base} \times \text{Age Factor} + \text{Smoker Loading} - \text{Female Discount}) \times \text{Term Factor}$$
-        $$\text{Subtotal} = \text{Net Base} + \sum \text{Riders} - \text{Direct Online Discount}$$
-        $$\text{Total Annual Premium} = \text{Subtotal} \times 1.18_{\text{GST}}$$
-        $$\text{Installment} = \text{Total Annual Premium} \times \text{Frequency Factor}$$
-        """)
-
-# -----------------------------------------------------------------------------
-# CLEAN FOOTER
-# -----------------------------------------------------------------------------
-st.markdown("---")
 st.markdown("""
-<div style="text-align: center; color: #94A3B8; font-size: 0.8rem; padding: 10px;">
-    © 2026 Aegis Shield Life Insurance Company Limited • IRDAI Registration No. 142<br>
+<div style="text-align: center; color: #94A3B8; font-size: 0.78rem; padding: 20px 0;">
+    © 2026 Aegis Life Insurance Co. Ltd. • IRDAI Reg. 142<br>
     <em>End-Term Project & Assignment 2 • Python Programming for Business Students</em>
 </div>
 """, unsafe_allow_html=True)
- 
+
