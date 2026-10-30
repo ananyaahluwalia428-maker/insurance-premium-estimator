@@ -3,13 +3,15 @@
 COURSE: Python Programming for Business Students
 PROJECT: End-Term Project & Assignment 2
 TOPIC: Life Insurance Premium Estimator (Business Idea #16)
-EDITION: Calm Minimalist Single-Page Edition (Zero Tabs, Gentle on Eyes)
+EDITION: High-Contrast Minimalist Single-Page Edition (Fixed Header Visibility)
 ================================================================================
 """
+
 import streamlit as st
 import datetime
+
 # -----------------------------------------------------------------------------
-# 1. PAGE SETUP & CALM MINIMALIST CSS
+# 1. PAGE SETUP & HIGH-CONTRAST MINIMALIST CSS
 # -----------------------------------------------------------------------------
 st.set_page_config(
     page_title="Aegis Life | Premium Estimator",
@@ -18,14 +20,13 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Soft, eye-friendly styling: neutral whites, subtle greys, gentle typography
+# High-contrast styling: Guarantees visibility in both Light Mode and Dark Mode
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
     
     html, body, [class*="css"] {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        color: #F7F1E2;
     }
 
     /* ---------------------------------------------------------
@@ -36,103 +37,111 @@ st.markdown("""
         height: 14px !important;
     }
     ::-webkit-scrollbar-track {
-        background: #F8FAFC !important;
+        background: #F1F5F9 !important;
     }
     ::-webkit-scrollbar-thumb {
-        background: #CBD5E1 !important;
+        background: #94A3B8 !important;
         border-radius: 8px !important;
-        border: 3px solid #F8FAFC !important;
+        border: 3px solid #F1F5F9 !important;
     }
     ::-webkit-scrollbar-thumb:hover {
-        background: #94A3B8 !important;
+        background: #64748B !important;
     }
     * {
         scrollbar-width: auto !important;
-        scrollbar-color: #CBD5E1 #F8FAFC !important;
+        scrollbar-color: #94A3B8 #F1F5F9 !important;
     }
 
     /* ---------------------------------------------------------
-       2. CALM, MINIMALIST HEADER
+       2. HIGH-CONTRAST HEADER (GUARANTEED VISIBILITY)
        --------------------------------------------------------- */
     .calm-header {
-        padding: 16px 0 20px 0;
-        border-bottom: 1px solid #E2E8F0;
-        margin-bottom: 24px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
+        background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%) !important;
+        border: 1px solid #334155 !important;
+        border-radius: 14px !important;
+        padding: 22px 28px !important;
+        margin-bottom: 24px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 14px !important;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15) !important;
     }
     .calm-title {
-        font-size: 1.45rem;
-        font-weight: 700;
-        color: #0F172A;
-        letter-spacing: -0.02em;
-        margin: 0;
+        font-size: 1.85rem !important;
+        font-weight: 800 !important;
+        color: #FFFFFF !important; /* Pure high-contrast white */
+        letter-spacing: -0.02em !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
     }
     .calm-subtitle {
-        font-size: 0.85rem;
-        color: #64748B;
-        margin-top: 4px;
+        font-size: 0.9rem !important;
+        color: #CBD5E1 !important; /* Crisp light silver text */
+        margin-top: 5px !important;
     }
     .calm-badge {
-        font-size: 0.8rem;
-        color: #475569;
-        background: #F1F5F9;
-        border: 1px solid #E2E8F0;
-        padding: 4px 12px;
-        border-radius: 20px;
+        font-size: 0.82rem !important;
+        color: #F8FAFC !important;
+        background: rgba(255, 255, 255, 0.12) !important;
+        border: 1px solid rgba(255, 255, 255, 0.25) !important;
+        padding: 6px 14px !important;
+        border-radius: 20px !important;
+        font-weight: 600 !important;
     }
 
     /* ---------------------------------------------------------
-       3. GENTLE HERO PRICE CARD (NO EYE-STRAIN)
+       3. HERO PRICE CARD (SOFT & CLEAR)
        --------------------------------------------------------- */
     .hero-price-card {
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 12px;
-        padding: 22px 24px;
-        margin-bottom: 20px;
+        background: #F0FDF4 !important;
+        border: 1.5px solid #BBF7D0 !important;
+        border-radius: 12px !important;
+        padding: 22px 24px !important;
+        margin-bottom: 20px !important;
     }
     .hero-price-label {
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        font-weight: 600;
-        color: #64748B;
-        letter-spacing: 0.05em;
-        margin-bottom: 4px;
+        font-size: 0.8rem !important;
+        text-transform: uppercase !important;
+        font-weight: 700 !important;
+        color: #166534 !important;
+        letter-spacing: 0.05em !important;
+        margin-bottom: 4px !important;
     }
     .hero-price-value {
-        font-size: 2.3rem;
-        font-weight: 700;
-        color: #0F172A;
-        line-height: 1.15;
+        font-size: 2.3rem !important;
+        font-weight: 800 !important;
+        color: #14532D !important;
+        line-height: 1.15 !important;
     }
     .hero-price-note {
-        font-size: 0.82rem;
-        color: #10B981;
-        margin-top: 6px;
-        font-weight: 500;
+        font-size: 0.82rem !important;
+        color: #15803D !important;
+        margin-top: 6px !important;
+        font-weight: 600 !important;
     }
 
     /* ---------------------------------------------------------
-       4. SOFT INFORMATION BOXES
+       4. SOFT PLAN & TAX NOTICES
        --------------------------------------------------------- */
     .soft-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 10px;
-        padding: 16px 18px;
-        margin-bottom: 16px;
+        background: #FFFFFF !important;
+        border: 1px solid #CBD5E1 !important;
+        border-radius: 10px !important;
+        padding: 16px 18px !important;
+        margin-bottom: 16px !important;
     }
     .soft-tax-note {
-        background: #F8FAFC;
-        border-left: 3px solid #3B82F6;
-        padding: 10px 14px;
-        border-radius: 4px;
-        font-size: 0.85rem;
-        color: #334155;
-        margin-bottom: 18px;
+        background: #EFF6FF !important;
+        border-left: 4px solid #3B82F6 !important;
+        padding: 12px 16px !important;
+        border-radius: 6px !important;
+        font-size: 0.86rem !important;
+        color: #1E40AF !important;
+        margin-bottom: 18px !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -251,16 +260,20 @@ def calculate_insurance_premium(
 
 
 # -----------------------------------------------------------------------------
-# 4. GENTLE & MINIMALIST HEADER (NO FLASHY BANNERS)
+# 4. HIGH-CONTRAST HEADER (100% VISIBLE BRAND NAME)
 # -----------------------------------------------------------------------------
 st.markdown("""
 <div class="calm-header">
     <div>
-        <div class="calm-title">🛡️ Aegis Life Insurance</div>
-        <div class="calm-subtitle">Simple, transparent premium calculation with instant itemized quotes</div>
+        <div class="calm-title">
+            <span>🛡️</span> Aegis Life Insurance
+        </div>
+        <div class="calm-subtitle">
+            Simple, transparent premium calculation with instant itemized quotes
+        </div>
     </div>
     <div style="display: flex; gap: 8px; align-items: center;">
-        <span class="calm-badge">IRDAI Reg. 142</span>
+        <span class="calm-badge">IRDAI Reg. No. 142</span>
         <span class="calm-badge">99.3% Claim Ratio</span>
     </div>
 </div>
@@ -335,10 +348,10 @@ calc = calculate_insurance_premium(
 # Plan Title & Description Card
 st.markdown(f"""
 <div class="soft-card">
-    <div style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 2px;">
+    <div style="font-size: 1.15rem; font-weight: 700; color: #0F172A; margin-bottom: 4px;">
         {policy_type}
     </div>
-    <div style="font-size: 0.88rem; color: #64748B;">
+    <div style="font-size: 0.9rem; color: #475569;">
         {PLAN_DESCRIPTIONS[policy_type]}
     </div>
 </div>
@@ -400,7 +413,7 @@ with col_right:
 
     quote_id = f"AGS-{age}{policy_term}-{abs(hash(applicant_name)) % 90000 + 10000}"
     st.markdown(f"""
-    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 12px 14px; border-radius: 8px; font-size: 0.82rem; margin-top: 10px;">
+    <div style="background: #F8FAFC; border: 1px solid #CBD5E1; padding: 12px 14px; border-radius: 8px; font-size: 0.85rem; margin-top: 10px; color: #1E293B;">
         <strong>Quote Ref:</strong> <code>{quote_id}</code><br>
         <strong>Applicant:</strong> {applicant_name} ({gender}, Age {age})<br>
         <strong>Term:</strong> {policy_term} Years (Active till age {age + policy_term})
@@ -470,9 +483,8 @@ with st.expander("🎓 Academic Project Details & Python Logic (For Course Evalu
 # FOOTER
 # -----------------------------------------------------------------------------
 st.markdown("""
-<div style="text-align: center; color: #94A3B8; font-size: 0.78rem; padding: 20px 0;">
+<div style="text-align: center; color: #64748B; font-size: 0.78rem; padding: 20px 0;">
     © 2026 Aegis Life Insurance Co. Ltd. • IRDAI Reg. 142<br>
     <em>End-Term Project & Assignment 2 • Python Programming for Business Students</em>
 </div>
 """, unsafe_allow_html=True)
-
