@@ -4,69 +4,111 @@ COURSE: Python Programming for Business Students
 PROJECT: End-Term Project & Assignment 2
 TOPIC: Life Insurance Premium Estimator & Quote Engine (Business Idea #16)
 BRAND: Aegis Shield Life Insurance Co. Ltd. (IRDAI Reg. No. 142)
-AUTHOR: Student Project Submission
+EDITION: Ultra-Sleek Multi-Tab FinTech Edition
 ================================================================================
 """
 
 import streamlit as st
 import datetime
+import pandas as pd
 
 # -----------------------------------------------------------------------------
-# 1. PAGE CONFIGURATION & CORPORATE BRAND STYLING (COMMERCIAL UI/UX)
+# 1. PAGE CONFIGURATION & ULTRA-SLEEK FINTECH CSS
 # -----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="Aegis Shield Life | India's Trusted Life Insurer",
+    page_title="Aegis Shield Life | Ultra-Sleek Insurance Hub",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom Corporate CSS for authentic insurance portal look & feel
+# Custom High-End FinTech Styling
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
     
     html, body, [class*="css"] {
         font-family: 'Plus Jakarta Sans', sans-serif;
     }
     
-    /* Top Corporate Header */
-    .corporate-header {
-        background: linear-gradient(135deg, #0A192F 0%, #172A45 50%, #1E3A8A 100%);
-        padding: 24px 30px;
-        border-radius: 12px;
+    /* Sleek Segmented Pill Tabs (Transforms standard tabs into macOS / iOS pills) */
+    div[data-baseweb="tab-list"] {
+        gap: 8px;
+        background-color: #F1F5F9;
+        padding: 6px;
+        border-radius: 14px;
+        border: 1px solid #E2E8F0;
+        margin-bottom: 20px;
+    }
+    div[data-baseweb="tab"] {
+        height: 44px;
+        border-radius: 10px;
+        padding: 8px 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #475569;
+        background-color: transparent;
+        border: none !important;
+        transition: all 0.2s ease-in-out;
+    }
+    div[data-baseweb="tab"]:hover {
+        color: #0F172A;
+        background-color: rgba(255, 255, 255, 0.7);
+    }
+    div[aria-selected="true"] {
+        background-color: #FFFFFF !important;
+        color: #1E3A8A !important;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
+        font-weight: 700 !important;
+    }
+    div[data-baseweb="tab-border"], div[data-baseweb="tab-highlight"] {
+        display: none;
+    }
+    
+    /* Header Gradient & Glassmorphism */
+    .hero-navbar {
+        background: linear-gradient(135deg, #0A192F 0%, #0F2A4A 45%, #1E3A8A 100%);
+        border-radius: 16px;
+        padding: 24px 32px;
         color: white;
         margin-bottom: 20px;
-        box-shadow: 0 10px 25px -5px rgba(10, 25, 47, 0.3);
+        box-shadow: 0 12px 30px -10px rgba(10, 25, 47, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
     }
-    .corp-title {
-        font-size: 2.1rem;
+    .hero-navbar::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, rgba(37,99,235,0.25) 0%, rgba(0,0,0,0) 70%);
+        pointer-events: none;
+    }
+    .hero-title {
+        font-size: 2.2rem;
         font-weight: 800;
-        letter-spacing: -0.5px;
+        letter-spacing: -0.03em;
         margin: 0;
         display: flex;
         align-items: center;
         gap: 12px;
     }
-    .corp-tagline {
-        font-size: 0.95rem;
-        color: #93C5FD;
-        margin-top: 6px;
-        margin-bottom: 0;
-    }
-    .header-badges {
+    .hero-badge-row {
         display: flex;
-        gap: 15px;
-        margin-top: 14px;
+        gap: 10px;
         flex-wrap: wrap;
+        margin-top: 14px;
     }
-    .corp-pill {
-        background: rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 0.78rem;
+    .badge-pill {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        padding: 5px 14px;
+        border-radius: 30px;
+        font-size: 0.8rem;
         font-weight: 600;
         color: #F8FAFC;
         display: inline-flex;
@@ -74,96 +116,76 @@ st.markdown("""
         gap: 6px;
     }
     
-    /* Trust & Guarantee Strip */
-    .trust-strip {
-        background: #F8FAFC;
+    /* Sleek Cards */
+    .sleek-card {
+        background: #FFFFFF;
         border: 1px solid #E2E8F0;
-        border-radius: 10px;
-        padding: 12px 20px;
-        margin-bottom: 24px;
-        display: flex;
-        justify-content: space-around;
-        flex-wrap: wrap;
-        gap: 12px;
-        text-align: center;
+        border-radius: 14px;
+        padding: 20px;
+        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
+        margin-bottom: 18px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .trust-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #334155;
+    .sleek-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08);
     }
-    .trust-icon {
-        color: #2563EB;
-        font-size: 1.1rem;
-    }
-
-    /* Modern Quote Metric Cards */
-    .quote-hero-box {
+    
+    /* Hero Quote Price Display */
+    .price-box {
         background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
         border: 1.5px solid #86EFAC;
-        border-radius: 12px;
-        padding: 20px;
+        border-radius: 14px;
+        padding: 22px;
+        text-align: left;
         margin-bottom: 20px;
-        box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.1);
+        box-shadow: 0 6px 16px -2px rgba(16, 185, 129, 0.12);
     }
-    .hero-premium-title {
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+    .price-label {
+        font-size: 0.8rem;
         font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
         color: #15803D;
         margin-bottom: 4px;
     }
-    .hero-premium-amount {
-        font-size: 2.3rem;
+    .price-number {
+        font-size: 2.5rem;
         font-weight: 800;
         color: #065F46;
         line-height: 1.1;
+        letter-spacing: -0.02em;
     }
     
-    /* Tax Saving Highlight Callout */
-    .tax-badge-box {
+    /* External Tab Link Pills */
+    .ext-tab-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #F8FAFC;
+        border: 1px solid #CBD5E1;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.84rem;
+        font-weight: 600;
+        color: #1E293B;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    .ext-tab-btn:hover {
         background: #EFF6FF;
+        border-color: #3B82F6;
+        color: #1D4ED8;
+    }
+    
+    /* Tax Shield Ribbon */
+    .tax-ribbon {
+        background: linear-gradient(90deg, #EFF6FF 0%, #DBEAFE 100%);
         border-left: 4px solid #2563EB;
-        padding: 12px 16px;
-        border-radius: 6px;
-        margin-bottom: 16px;
+        padding: 12px 18px;
+        border-radius: 8px;
         font-size: 0.88rem;
         color: #1E40AF;
-    }
-    
-    /* Plan Selection Card */
-    .plan-card {
-        background: #FFFFFF;
-        border: 1.5px solid #CBD5E1;
-        border-radius: 10px;
-        padding: 16px;
-        margin-bottom: 14px;
-        transition: all 0.2s ease-in-out;
-    }
-    .badge-popular {
-        background: #FEF3C7;
-        color: #92400E;
-        font-size: 0.72rem;
-        font-weight: 700;
-        padding: 2px 8px;
-        border-radius: 12px;
-        text-transform: uppercase;
-    }
-
-    /* Live Support Bar */
-    .support-bar {
-        background: #1E293B;
-        color: #94A3B8;
-        padding: 10px 16px;
-        border-radius: 8px;
-        font-size: 0.82rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
         margin-bottom: 18px;
     }
 </style>
@@ -171,10 +193,8 @@ st.markdown("""
 
 
 # -----------------------------------------------------------------------------
-# 2. BUSINESS ACTUARIAL DATA & PRODUCT SPECIFICATIONS
+# 2. ACTUARIAL DATA & PRODUCT SPECIFICATIONS
 # -----------------------------------------------------------------------------
-# Dictionary: Base annual rate per ₹1,00,000 (1 Lakh) of Sum Assured
-# Derived from IRDAI standardized term & endowment morbidity mortality tables
 BASE_RATES_PER_LAKH = {
     "i-Protect Smart Term Life (Pure Protection)": 110.0,
     "Guaranteed Income Endowment Plan (Wealth + Cover)": 480.0,
@@ -183,20 +203,19 @@ BASE_RATES_PER_LAKH = {
 }
 
 PLAN_TAGLINES = {
-    "i-Protect Smart Term Life (Pure Protection)": "⭐ Most Popular • Maximum Financial Security at Minimum Cost",
-    "Guaranteed Income Endowment Plan (Wealth + Cover)": "💰 Guaranteed Maturity Corpus + Comprehensive Life Cover",
-    "Century Whole Life Shield (Lifelong 99-Yr Cover)": "🏛️ Generational Legacy Transfer up to Age 99",
-    "Smart Child Future Builder (Education Milestone)": "🎓 Guaranteed Education Funding with Premium Waiver Protection"
+    "i-Protect Smart Term Life (Pure Protection)": "⭐ MOST POPULAR • Pure High-Sum Life Cover",
+    "Guaranteed Income Endowment Plan (Wealth + Cover)": "💰 GUARANTEED RETURNS • Capital Growth + Protection",
+    "Century Whole Life Shield (Lifelong 99-Yr Cover)": "🏛️ HERITAGE TRANSFER • Lifelong 99-Year Protection",
+    "Smart Child Future Builder (Education Milestone)": "🎓 EDUCATION GUARANTEE • Premium Waiver Protection"
 }
 
 PLAN_SUMMARIES = {
-    "i-Protect Smart Term Life (Pure Protection)": "Ideal for breadwinners. Provides high sum assured at ultra-low rates. Payout provided to nominee upon unforeseen demise during policy duration.",
-    "Guaranteed Income Endowment Plan (Wealth + Cover)": "Combines capital security with disciplined savings. Payout of maturity corpus with guaranteed additions upon term completion.",
-    "Century Whole Life Shield (Lifelong 99-Yr Cover)": "Provides lifelong family legacy protection till age 99. Accumulated reversionary bonuses payable to legal heirs.",
-    "Smart Child Future Builder (Education Milestone)": "Secures key academic milestones. If the parent passes away, future premiums are completely waived while the child receives milestone educational payouts."
+    "i-Protect Smart Term Life (Pure Protection)": "Ultra low-cost, maximum coverage term policy. Pays full sum assured tax-free to nominee upon unforeseen demise.",
+    "Guaranteed Income Endowment Plan (Wealth + Cover)": "Dual benefit of financial protection plus disciplined compounding savings with guaranteed maturity additions.",
+    "Century Whole Life Shield (Lifelong 99-Yr Cover)": "Permanent family legacy cover lasting up to age 99, passing accumulated reversionary bonuses to future generations.",
+    "Smart Child Future Builder (Education Milestone)": "Secures college milestones. If parent passes away, future premiums are waived while child receives pre-scheduled payouts."
 }
 
-# Modal frequency factors (Installment multipliers)
 FREQUENCY_FACTORS = {
     "Annual Mode (1 payment/year - 0% Surcharge)": 1.0,
     "Monthly Mode (12 ECS payments/year)": 0.088,
@@ -204,11 +223,11 @@ FREQUENCY_FACTORS = {
     "Semi-Annual Mode (2 payments/year)": 0.51
 }
 
-GST_RATE = 0.18  # 18% Goods & Services Tax (IRDAI Life Insurance Directive)
+GST_RATE = 0.18
 
 
 # -----------------------------------------------------------------------------
-# 3. CORE ACTUARIAL BUSINESS LOGIC ENGINE (PYTHON FUNCTIONS & ARITHMETIC)
+# 3. CORE CALCULATION ENGINE
 # -----------------------------------------------------------------------------
 def calculate_insurance_premium(
     policy_type: str,
@@ -224,49 +243,27 @@ def calculate_insurance_premium(
     frequency: str,
     direct_online_discount: bool
 ):
-    """
-    Computes life insurance premium quotation modeled after authentic insurer underwriting:
-    - Base Plan mortality charges per ₹1 Lakh sum assured
-    - Multi-tier age band risk loading
-    - 40% tobacco/nicotine surcharge
-    - 10% female longevity discount
-    - Add-on protection riders (Critical illness, Accidental death, Premium waiver)
-    - 5% Direct-to-Consumer digital discount
-    - Statutory 18% GST and modal installment breakdown
-    """
-    # Step 1: Base calculation using plan dictionary
     sum_assured_units = sum_assured / 100000.0
     base_rate = BASE_RATES_PER_LAKH[policy_type]
     base_premium = base_rate * sum_assured_units
 
-    # Step 2: Actuarial Age Multiplier (Conditional logic)
+    # Age band multipliers
     if age < 25:
-        age_factor = 0.85     # Preferred Young Adult Tier
+        age_factor = 0.85
     elif 25 <= age <= 35:
-        age_factor = 1.00     # Prime Healthy Adult Baseline
+        age_factor = 1.00
     elif 36 <= age <= 45:
-        age_factor = 1.35     # Mature Risk Band
+        age_factor = 1.35
     elif 46 <= age <= 55:
-        age_factor = 1.80     # Elevated Morbidity Risk
+        age_factor = 1.80
     else:
-        age_factor = 2.40     # Senior Coverage Band (56-65)
+        age_factor = 2.40
 
     adjusted_premium = base_premium * age_factor
+    smoker_loading = (adjusted_premium * 0.40) if is_smoker else 0.0
+    gender_discount = (adjusted_premium * 0.10) if gender == "Female" else 0.0
 
-    # Step 3: Lifestyle Tobacco / Smoking Surcharge
-    if is_smoker:
-        smoker_loading = adjusted_premium * 0.40  # +40% actuarial loading
-    else:
-        smoker_loading = 0.0
-
-    # Step 4: Actuarial Longevity Gender Discount
-    # Statistical tables reflect higher female life expectancy
-    if gender == "Female":
-        gender_discount = adjusted_premium * 0.10  # 10% healthy female rebate
-    else:
-        gender_discount = 0.0
-
-    # Step 5: Policy Tenure Adjustment Factor
+    # Policy term factor
     if policy_term > 25:
         term_factor = 1.05
     elif policy_term < 15:
@@ -276,54 +273,25 @@ def calculate_insurance_premium(
 
     net_base_premium = (adjusted_premium + smoker_loading - gender_discount) * term_factor
 
-    # Step 6: Add-on Protection Rider Charges
-    rider_cost = 0.0
-    critical_illness_cost = 0.0
-    accidental_death_cost = 0.0
-    waiver_premium_cost = 0.0
+    # Riders
+    critical_illness_cost = (25.0 * sum_assured_units) if has_critical_illness else 0.0
+    accidental_death_cost = (15.0 * sum_assured_units) if has_accidental_death else 0.0
+    waiver_premium_cost = (net_base_premium * 0.03) if has_premium_waiver else 0.0
+    rider_cost = critical_illness_cost + accidental_death_cost + waiver_premium_cost
 
-    if has_critical_illness:
-        # ₹25 per Lakh cover (Covers 64 critical conditions like cancer, stroke, bypass)
-        critical_illness_cost = 25.0 * sum_assured_units
-        rider_cost += critical_illness_cost
-
-    if has_accidental_death:
-        # ₹15 per Lakh cover (Double payout for accidental demise)
-        accidental_death_cost = 15.0 * sum_assured_units
-        rider_cost += accidental_death_cost
-
-    if has_premium_waiver:
-        # 3% of net base premium to waive all future premiums upon disability
-        waiver_premium_cost = net_base_premium * 0.03
-        rider_cost += waiver_premium_cost
-
-    # Step 7: Subtotal and Digital Direct Discount
     subtotal_pre_discount = net_base_premium + rider_cost
-    
-    online_rebate = 0.0
-    if direct_online_discount:
-        # 5% paperless direct purchase discount
-        online_rebate = subtotal_pre_discount * 0.05
-
+    online_rebate = (subtotal_pre_discount * 0.05) if direct_online_discount else 0.0
     subtotal_annual = subtotal_pre_discount - online_rebate
 
-    # Step 8: Statutory GST Calculation
+    # 18% GST
     gst_amount = subtotal_annual * GST_RATE
     total_annual_premium = subtotal_annual + gst_amount
+    installment_premium = total_annual_premium * FREQUENCY_FACTORS[frequency]
 
-    # Step 9: Modal Frequency Installment Calculation
-    modal_factor = FREQUENCY_FACTORS[frequency]
-    installment_premium = total_annual_premium * modal_factor
-
-    # Step 10: Income Suitability Check (Human Life Value - HLV Rule of Thumb)
-    # Recommended cover is 10x - 15x annual income
     recommended_min_cover = annual_income * 10
-    recommended_max_cover = annual_income * 15
     is_adequately_covered = (sum_assured >= recommended_min_cover)
-
-    # Step 11: Estimated Section 80C Tax Savings (assuming 30% tax bracket + cess)
-    eligible_80c_investment = min(total_annual_premium, 150000.0)
-    tax_savings_estimate = eligible_80c_investment * 0.312  # 30% slab + 4% cess
+    eligible_80c = min(total_annual_premium, 150000.0)
+    tax_savings_estimate = eligible_80c * 0.312
 
     return {
         "base_premium": base_premium,
@@ -343,85 +311,65 @@ def calculate_insurance_premium(
         "daily_cost": total_annual_premium / 365.0,
         "tax_savings_estimate": tax_savings_estimate,
         "recommended_min_cover": recommended_min_cover,
-        "recommended_max_cover": recommended_max_cover,
         "is_adequately_covered": is_adequately_covered
     }
 
 
 # -----------------------------------------------------------------------------
-# 4. BRAND HEADER & TRUST BANNER
+# 4. SLEEK CORPORATE HEADER & REAL MULTI-BROWSER TAB CAPABILITY
 # -----------------------------------------------------------------------------
 st.markdown("""
-<div class="corporate-header">
+<div class="hero-navbar">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
         <div>
-            <div class="corp-title">
+            <div class="hero-title">
                 <span>🛡️</span> Aegis Shield Life Insurance
             </div>
-            <p class="corp-tagline">A Joint Venture with Global Assurance Corp • IRDAI Registration No. 142</p>
+            <div style="font-size: 0.95rem; color: #93C5FD; margin-top: 4px;">
+                A Joint Venture with Global Assurance Corp • IRDAI Registration No. 142
+            </div>
         </div>
         <div style="text-align: right; margin-top: 8px;">
-            <span style="font-size: 0.8rem; color: #93C5FD; display: block;">24x7 Customer Helpline</span>
-            <span style="font-size: 1.15rem; font-weight: 700; color: #FFFFFF;">📞 1800-266-7788</span>
+            <div style="font-size: 0.8rem; color: #93C5FD;">Priority Claim Assistance</div>
+            <div style="font-size: 1.25rem; font-weight: 700; color: #FFFFFF;">📞 1800-266-7788</div>
         </div>
     </div>
-    <div class="header-badges">
-        <span class="corp-pill">🏆 99.34% Claim Settlement Ratio (FY 2025-26)</span>
-        <span class="corp-pill">⚡ 3-Hour Express Claim Processing</span>
-        <span class="corp-pill">🔒 256-Bit Bank Grade SSL Encryption</span>
-        <span class="corp-pill">📜 30-Day Free-Look Money-Back Guarantee</span>
+    <div class="hero-badge-row">
+        <span class="badge-pill">🏆 99.34% Claim Settlement Ratio</span>
+        <span class="badge-pill">⚡ 3-Hour Express Claim Processing</span>
+        <span class="badge-pill">🔒 256-Bit Bank Grade SSL</span>
+        <span class="badge-pill">📜 30-Day Free Look Guarantee</span>
+        <span class="badge-pill">👥 2.8 Crore+ Lives Protected</span>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# Trust Statistics Banner
+# Quick Action Bar: Open External Resource Portals in Real New Browser Tabs
 st.markdown("""
-<div class="trust-strip">
-    <div class="trust-item"><span class="trust-icon">👥</span> <strong>2.8 Crore+</strong> Lives Protected</div>
-    <div class="trust-item"><span class="trust-icon">💰</span> <strong>₹14,200 Cr</strong> Claims Settled</div>
-    <div class="trust-item"><span class="trust-icon">⭐</span> <strong>4.8 / 5 Rating</strong> (85,000+ Reviews)</div>
-    <div class="trust-item"><span class="trust-icon">🏥</span> <strong>11,000+</strong> Cashless Partner Hospitals</div>
+<div style="display: flex; gap: 10px; margin-bottom: 22px; flex-wrap: wrap; align-items: center;">
+    <span style="font-size: 0.82rem; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">External Links (Open in New Tab):</span>
+    <a href="https://www.irdai.gov.in" target="_blank" class="ext-tab-btn">🏛️ IRDAI Regulator Portal ↗</a>
+    <a href="https://incometax.gov.in" target="_blank" class="ext-tab-btn">💼 Section 80C Tax Guide ↗</a>
+    <a href="https://docs.streamlit.io" target="_blank" class="ext-tab-btn">⚡ Streamlit Docs ↗</a>
+    <a href="http://localhost:8501" target="_blank" class="ext-tab-btn">🪟 Duplicate App in New Browser Tab ↗</a>
 </div>
 """, unsafe_allow_html=True)
 
 
 # -----------------------------------------------------------------------------
-# 5. SIDEBAR: APPLICANT PROFILER & POLICY CONFIGURATOR
+# 5. SIDEBAR: APPLICANT CONFIGURATOR
 # -----------------------------------------------------------------------------
 st.sidebar.markdown("""
-<div style="background: #1E3A8A; color: white; padding: 12px; border-radius: 8px; margin-bottom: 14px;">
-    <h3 style="margin: 0; font-size: 1.1rem; color: white;">📋 Get Your Instant Quote</h3>
-    <p style="margin: 3px 0 0 0; font-size: 0.78rem; color: #BFDBFE;">Customize your plan parameters in real-time</p>
+<div style="background: linear-gradient(135deg, #1E3A8A 0%, #172554 100%); color: white; padding: 14px; border-radius: 10px; margin-bottom: 14px;">
+    <h3 style="margin: 0; font-size: 1.15rem; color: white;">📋 Policy Configurator</h3>
+    <p style="margin: 3px 0 0 0; font-size: 0.8rem; color: #BFDBFE;">Customize your real-time quotation</p>
 </div>
 """, unsafe_allow_html=True)
 
-# Input 1: Proposer Full Name
-applicant_name = st.sidebar.text_input(
-    "Full Name of Insured",
-    value="Rahul Sharma",
-    help="Enter official legal name as registered in PAN/Aadhaar."
-)
+applicant_name = st.sidebar.text_input("Full Name of Insured", value="Rahul Sharma")
+age = st.sidebar.number_input("Age (Years)", min_value=18, max_value=65, value=29, step=1)
+gender = st.sidebar.radio("Gender", options=["Male", "Female", "Other"], index=0, horizontal=True)
 
-# Input 2: Age with Slider and Validation
-age = st.sidebar.number_input(
-    "Age (Years)",
-    min_value=18,
-    max_value=65,
-    value=29,
-    step=1,
-    help="Eligible age band is 18 to 65 years. Life expectancy rates adjust accordingly."
-)
-
-# Input 3: Gender Radio
-gender = st.sidebar.radio(
-    "Gender",
-    options=["Male", "Female", "Other"],
-    index=0,
-    horizontal=True,
-    help="Female applicants receive an automatic 10% healthy longevity discount on base rates."
-)
-
-# Input 4: Annual Income for Human Life Value underwriting
 annual_income_options = {
     300000: "₹3 to ₹5 Lakhs",
     600000: "₹6 to ₹10 Lakhs",
@@ -434,19 +382,11 @@ annual_income = st.sidebar.select_slider(
     "Annual Income Tier",
     options=list(annual_income_options.keys()),
     value=1200000,
-    format_func=lambda x: annual_income_options[x],
-    help="Used to calculate Human Life Value (HLV) to ensure adequate family coverage."
+    format_func=lambda x: annual_income_options[x]
 )
 
-# Input 5: Plan Selector
-policy_type = st.sidebar.selectbox(
-    "Select Insurance Plan",
-    options=list(BASE_RATES_PER_LAKH.keys()),
-    index=0,
-    help="Select the insurance product architecture matching your life stage."
-)
+policy_type = st.sidebar.selectbox("Select Insurance Plan", options=list(BASE_RATES_PER_LAKH.keys()), index=0)
 
-# Input 6: Sum Assured / Coverage Amount
 sum_assured_options = [
     1000000, 2500000, 5000000, 7500000, 
     10000000, 15000000, 20000000, 30000000, 50000000
@@ -466,419 +406,429 @@ sum_assured = st.sidebar.select_slider(
     "Life Cover Amount (Sum Assured)",
     options=sum_assured_options,
     value=10000000,
-    format_func=lambda x: sum_assured_labels[x],
-    help="Tax-free lump sum payout to nominee upon demise under Section 10(10D)."
+    format_func=lambda x: sum_assured_labels[x]
 )
 
-# Input 7: Policy Term Slider
-max_allowable_term = min(40, 75 - age)  # Cover up to age 75 maximum
-policy_term = st.sidebar.slider(
-    "Policy Duration (Coverage Period)",
-    min_value=5,
-    max_value=max_allowable_term,
-    value=min(30, max_allowable_term),
-    help=f"Based on your entry age ({age}), maximum permitted coverage tenure is {max_allowable_term} years."
-)
+max_allowable_term = min(40, 75 - age)
+policy_term = st.sidebar.slider("Policy Duration (Years)", min_value=5, max_value=max_allowable_term, value=min(30, max_allowable_term))
 
-# Input 8: Smoking / Nicotine Consumption
-smoker_choice = st.sidebar.radio(
-    "Tobacco or Nicotine Consumption",
-    options=["Non-Smoker (Clean Lifestyle)", "Tobacco / Nicotine User"],
-    index=0,
-    help="Non-smokers qualify for our lowest preferred rates. Smokers incur a 40% morbidity loading."
-)
+smoker_choice = st.sidebar.radio("Tobacco / Nicotine Usage", options=["Non-Smoker (Standard)", "Tobacco / Nicotine User"], index=0)
 is_smoker = (smoker_choice == "Tobacco / Nicotine User")
 
-# Input 9: Comprehensive Protection Riders
 st.sidebar.markdown("---")
 st.sidebar.subheader("🛡️ Tailored Add-on Riders")
-rider_critical = st.sidebar.checkbox(
-    "Comprehensive Critical Illness (+₹25/Lakh)",
-    value=True,
-    help="Immediate lump-sum cash payout upon diagnosis of 64 critical conditions."
-)
-rider_accidental = st.sidebar.checkbox(
-    "Double Accidental Death Benefit (+₹15/Lakh)",
-    value=True,
-    help="Pays 2x the base sum assured to nominee in event of fatal accident."
-)
-rider_waiver = st.sidebar.checkbox(
-    "Waiver of Premium on Total Disability (+3%)",
-    value=True,
-    help="All future premiums waived if you suffer permanent disability while cover continues."
-)
+rider_critical = st.sidebar.checkbox("Comprehensive Critical Illness 64 (+₹25/L)", value=True)
+rider_accidental = st.sidebar.checkbox("Double Accidental Death Benefit (+₹15/L)", value=True)
+rider_waiver = st.sidebar.checkbox("Waiver of Premium on Total Disability (+3%)", value=True)
 
-# Input 10: Digital Purchase Discount & Payment Mode
 st.sidebar.markdown("---")
-direct_discount = st.sidebar.checkbox(
-    "🏷️ Direct Online Purchase (Save 5%)",
-    value=True,
-    help="Zero agent commission: enjoy 5% lifetime direct discount on policy premiums."
-)
-
-frequency = st.sidebar.selectbox(
-    "Premium Payment Frequency",
-    options=list(FREQUENCY_FACTORS.keys()),
-    index=0
-)
+direct_discount = st.sidebar.checkbox("🏷️ Direct Online Purchase (Save 5%)", value=True)
+frequency = st.sidebar.selectbox("Payment Frequency", options=list(FREQUENCY_FACTORS.keys()), index=0)
 
 
 # -----------------------------------------------------------------------------
-# 6. MAIN APPLICATION TABS (COMMERCIAL USER EXPERIENCE)
+# 6. SLEEK MULTI-TAB ARCHITECTURE (6 HIGH-END TABS)
 # -----------------------------------------------------------------------------
-tab_quote, tab_plans, tab_reviews, tab_academic = st.tabs([
-    "⚡ Instant Quote & Dashboard",
-    "⚖️ Plan Comparison & Features",
-    "⭐ Customer Reviews & Trust",
-    "🎓 Academic Project & Python Logic"
+tab_quote, tab_family, tab_compare, tab_hospitals, tab_claims, tab_academic = st.tabs([
+    "⚡ Instant Quote Studio",
+    "👨‍👩‍👧 Multi-Member Family Cover",
+    "⚖️ Plan Comparison Matrix",
+    "🏥 Cashless Hospital Network",
+    "🛡️ Claims & Trust Center",
+    "🎓 Academic Project & Code"
 ])
 
+# Compute primary quote
+primary_calc = calculate_insurance_premium(
+    policy_type=policy_type,
+    sum_assured=sum_assured,
+    age=age,
+    policy_term=policy_term,
+    gender=gender,
+    annual_income=annual_income,
+    is_smoker=is_smoker,
+    has_critical_illness=rider_critical,
+    has_accidental_death=rider_accidental,
+    has_premium_waiver=rider_waiver,
+    frequency=frequency,
+    direct_online_discount=direct_discount
+)
+
 # -----------------------------------------------------------------------------
-# TAB 1: INSTANT QUOTE & COMMERCIAL DASHBOARD
+# TAB 1: INSTANT QUOTE STUDIO
 # -----------------------------------------------------------------------------
 with tab_quote:
-    # Validation Check
-    has_error = False
-    if not applicant_name.strip():
-        st.error("⚠️ Please specify the Proposer Full Name in the sidebar configurator.")
-        has_error = True
-    
-    if (age + policy_term) > 75:
-        st.warning(f"⚠️ Policy tenure cannot exceed age 75. Current maturity age: {age + policy_term} years.")
-        has_error = True
+    # Selected Plan Banner
+    st.markdown(f"""
+    <div class="sleek-card" style="border-left: 5px solid #2563EB;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 1.2rem; font-weight: 700; color: #1E3A8A;">{policy_type}</span>
+            <span style="background: #FEF3C7; color: #92400E; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;">
+                {PLAN_TAGLINES[policy_type]}
+            </span>
+        </div>
+        <p style="margin: 0; font-size: 0.9rem; color: #475569;">{PLAN_SUMMARIES[policy_type]}</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    if not has_error:
-        try:
-            # Execute Business Calculation
-            calc = calculate_insurance_premium(
-                policy_type=policy_type,
-                sum_assured=sum_assured,
-                age=age,
-                policy_term=policy_term,
-                gender=gender,
-                annual_income=annual_income,
-                is_smoker=is_smoker,
-                has_critical_illness=rider_critical,
-                has_accidental_death=rider_accidental,
-                has_premium_waiver=rider_waiver,
-                frequency=frequency,
-                direct_online_discount=direct_discount
-            )
-
-            # Selected Plan Hero Header
-            st.markdown(f"""
-            <div class="plan-card" style="border-left: 5px solid #2563EB;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                    <span style="font-size: 1.15rem; font-weight: 700; color: #1E3A8A;">{policy_type}</span>
-                    <span class="badge-popular">{PLAN_TAGLINES[policy_type]}</span>
-                </div>
-                <p style="margin: 0; font-size: 0.9rem; color: #4B5563;">{PLAN_SUMMARIES[policy_type]}</p>
+    # Hero Price & Metric Row
+    col_price, col_m1, col_m2, col_m3 = st.columns([1.6, 1, 1, 1])
+    with col_price:
+        freq_label = frequency.split(" (")[0]
+        st.markdown(f"""
+        <div class="price-box">
+            <div class="price-label">{freq_label} Premium Payable</div>
+            <div class="price-number">₹{primary_calc['installment_premium']:,.2f}</div>
+            <div style="font-size: 0.82rem; color: #15803D; font-weight: 600; margin-top: 4px;">
+                ✓ Includes 18% GST • 0% Paperwork Fee
             </div>
-            """, unsafe_allow_html=True)
+        </div>
+        """, unsafe_allow_html=True)
+    with col_m1:
+        st.metric("Daily Affordability", f"₹{primary_calc['daily_cost']:.1f} / day", "Less than a cup of chai!")
+    with col_m2:
+        st.metric("Total Annual Premium", f"₹{primary_calc['total_annual_premium']:,.2f}")
+    with col_m3:
+        st.metric("Sec 80C Tax Saved", f"₹{primary_calc['tax_savings_estimate']:,.0f}", "At 30% slab")
 
-            # Human Life Value Suitability Alert
-            if not calc["is_adequately_covered"]:
-                st.info(f"💡 **Underwriting Advisory:** Based on your annual income of {annual_income_options[annual_income]}, insurance experts recommend a minimum cover of **₹{calc['recommended_min_cover'] / 10000000:.1f} Crores** (10x income). You currently have selected **{sum_assured_labels[sum_assured]}**.")
-            else:
-                st.success(f"✅ **Optimal Coverage:** Your selected {sum_assured_labels[sum_assured]} cover perfectly aligns with your financial human life value (10x-15x income benchmark).")
+    # Section 80C Ribbon
+    st.markdown(f"""
+    <div class="tax-ribbon">
+        💼 <strong>Tax Savings Alert:</strong> Claim up to <strong>₹1,50,000 tax deduction</strong> on this premium under Section 80C, saving approximately <strong>₹{primary_calc['tax_savings_estimate']:,.0f} in income tax</strong> this fiscal year. All nominee death payouts are 100% Tax-Free under Section 10(10D).
+    </div>
+    """, unsafe_allow_html=True)
 
-            # Main Price & Metric Hero Row
-            col_main_price, col_m1, col_m2, col_m3 = st.columns([1.6, 1, 1, 1])
+    # Two Columns: Detailed Line Items & Chart
+    c_left, c_right = st.columns([3, 2])
+    with c_left:
+        st.subheader("📑 Itemized Underwriting Breakdown")
+        invoice_table = [
+            {"Line Item": f"Base Mortality Cost ({sum_assured_labels[sum_assured]} Cover)", "Type": "Standard Rate", "Amount (₹)": f"₹{primary_calc['base_premium']:,.2f}"},
+            {"Line Item": f"Age Loading ({primary_calc['age_factor']}x for Age {age})", "Type": "Age Band", "Amount (₹)": f"₹{(primary_calc['base_premium'] * (primary_calc['age_factor'] - 1)):,.2f}" if primary_calc['age_factor'] >= 1 else f"-₹{(primary_calc['base_premium'] * (1 - primary_calc['age_factor'])):,.2f}"},
+            {"Line Item": "Tobacco / Smoker Risk Loading (+40%)", "Type": "Risk Loading", "Amount (₹)": f"₹{primary_calc['smoker_loading']:,.2f}" if primary_calc['smoker_loading'] > 0 else "₹0.00 (Standard)"},
+            {"Line Item": "Female Longevity Discount (-10%)", "Type": "Rebate", "Amount (₹)": f"-₹{primary_calc['gender_discount']:,.2f}" if primary_calc['gender_discount'] > 0 else "₹0.00"},
+            {"Line Item": "Net Underwritten Base Cover", "Type": "Net Base", "Amount (₹)": f"₹{primary_calc['net_base_premium']:,.2f}"},
+            {"Line Item": "Rider: Critical Illness 64 Cover", "Type": "Add-on Rider", "Amount (₹)": f"₹{primary_calc['critical_illness_cost']:,.2f}" if rider_critical else "Excluded"},
+            {"Line Item": "Rider: Accidental Death Benefit", "Type": "Add-on Rider", "Amount (₹)": f"₹{primary_calc['accidental_death_cost']:,.2f}" if rider_accidental else "Excluded"},
+            {"Line Item": "Rider: Waiver of Premium", "Type": "Add-on Rider", "Amount (₹)": f"₹{primary_calc['waiver_premium_cost']:,.2f}" if rider_waiver else "Excluded"},
+            {"Line Item": "Paperless Direct Online Discount (-5%)", "Type": "Direct Discount", "Amount (₹)": f"-₹{primary_calc['online_rebate']:,.2f}" if primary_calc['online_rebate'] > 0 else "₹0.00"},
+            {"Line Item": "Pre-Tax Subtotal", "Type": "Subtotal", "Amount (₹)": f"₹{primary_calc['subtotal_annual']:,.2f}"},
+            {"Line Item": "Goods & Services Tax (GST 18%)", "Type": "Statutory Tax", "Amount (₹)": f"₹{primary_calc['gst_amount']:,.2f}"},
+            {"Line Item": "⭐ Total Annual Premium Payable", "Type": "Final Total", "Amount (₹)": f"₹{primary_calc['total_annual_premium']:,.2f}"}
+        ]
+        st.table(invoice_table)
 
-            with col_main_price:
-                freq_label = frequency.split(" (")[0]
-                st.markdown(f"""
-                <div class="quote-hero-box">
-                    <div class="hero-premium-title">Your {freq_label} Premium</div>
-                    <div class="hero-premium-amount">₹{calc['installment_premium']:,.2f}</div>
-                    <div style="font-size: 0.8rem; color: #15803D; margin-top: 4px; font-weight: 600;">
-                        ✓ Includes 18% GST • No Hidden Fees
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
+    with c_right:
+        st.subheader("📊 Premium Allocation")
+        chart_data = {
+            "Net Base Cover": primary_calc['net_base_premium'],
+            "Add-on Riders": primary_calc['rider_cost'],
+            "GST (18%)": primary_calc['gst_amount']
+        }
+        st.bar_chart(chart_data)
 
-            with col_m1:
-                st.metric("Daily Affordability", f"₹{calc['daily_cost']:.1f} / day", "Less than coffee!")
-            with col_m2:
-                st.metric("Total Annual Premium", f"₹{calc['total_annual_premium']:,.2f}")
-            with col_m3:
-                st.metric("Sec 80C Tax Saved", f"₹{calc['tax_savings_estimate']:,.0f}", "Max 30% slab")
+        # Official Quotation Card
+        quote_ref = f"AGS-{age}{policy_term}-{abs(hash(applicant_name)) % 90000 + 10000}"
+        st.markdown(f"""
+        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 14px; font-size: 0.84rem; margin-top: 10px;">
+            <div style="font-weight: 700; color: #0F172A; margin-bottom: 4px;">📄 Quote Reference Slip</div>
+            <div><strong>Reference ID:</strong> <code>{quote_ref}</code></div>
+            <div><strong>Insured Person:</strong> {applicant_name} ({gender}, Age {age})</div>
+            <div><strong>Coverage Amount:</strong> {sum_assured_labels[sum_assured]} for {policy_term} Years</div>
+            <div><strong>Mode:</strong> {frequency.split(' (')[0]}</div>
+        </div>
+        """, unsafe_allow_html=True)
 
-            st.write("")
+        st.write("")
+        b_c1, b_c2 = st.columns(2)
+        with b_c1:
+            if st.button("🚀 Buy Policy Now", type="primary", use_container_width=True):
+                st.balloons()
+                st.success(f"Application for {quote_ref} initiated! Our advisor will call your registered number.")
+        with b_c2:
+            if st.button("📞 Request Callback", use_container_width=True):
+                st.info("Callback scheduled within 15 minutes.")
 
-            # Section 80C Callout Box
-            st.markdown(f"""
-            <div class="tax-badge-box">
-                💼 <strong>Income Tax Benefit:</strong> Under Section 80C, your annual premium of <strong>₹{calc['total_annual_premium']:,.2f}</strong> is fully tax-deductible up to ₹1,50,000, saving you approximately <strong>₹{calc['tax_savings_estimate']:,.0f} in income taxes</strong> each year. Plus, all death payouts to nominees are 100% tax-free under Section 10(10D).
-            </div>
-            """, unsafe_allow_html=True)
-
-            # Two Column Layout: Detailed Itemized Breakdown + Commercial Actions
-            col_left, col_right = st.columns([3, 2])
-
-            with col_left:
-                st.subheader("📑 Itemized Premium Quotation")
-                st.caption(f"Underwriting Proposer: {applicant_name} | Age {age} | {gender} | {policy_term} Yrs Tenure")
-
-                # Professional invoice line items
-                invoice_items = [
-                    {"Item Description": f"Base Life Mortality Charge ({sum_assured_labels[sum_assured]} Cover)", "Type": "Base Rate", "Amount (₹)": f"₹{calc['base_premium']:,.2f}"},
-                    {"Item Description": f"Actuarial Age Loading ({calc['age_factor']}x for Age {age})", "Type": "Age Band", "Amount (₹)": f"₹{(calc['base_premium'] * (calc['age_factor'] - 1)):,.2f}" if calc['age_factor'] >= 1 else f"-₹{(calc['base_premium'] * (1 - calc['age_factor'])):,.2f}"},
-                    {"Item Description": "Tobacco / Smoker Risk Loading (+40%)", "Type": "Risk Loading", "Amount (₹)": f"₹{calc['smoker_loading']:,.2f}" if calc['smoker_loading'] > 0 else "₹0.00 (Standard)"},
-                    {"Item Description": "Female Longevity Discount (-10%)", "Type": "Longevity Rebate", "Amount (₹)": f"-₹{calc['gender_discount']:,.2f}" if calc['gender_discount'] > 0 else "N/A"},
-                    {"Item Description": "Net Underwritten Base Premium", "Type": "Net Base", "Amount (₹)": f"₹{calc['net_base_premium']:,.2f}"},
-                    {"Item Description": "Rider: 64 Critical Illness Cover", "Type": "Add-on Rider", "Amount (₹)": f"₹{calc['critical_illness_cost']:,.2f}" if rider_critical else "Excluded"},
-                    {"Item Description": "Rider: Double Accidental Death Benefit", "Type": "Add-on Rider", "Amount (₹)": f"₹{calc['accidental_death_cost']:,.2f}" if rider_accidental else "Excluded"},
-                    {"Item Description": "Rider: Waiver of Premium on Disability", "Type": "Add-on Rider", "Amount (₹)": f"₹{calc['waiver_premium_cost']:,.2f}" if rider_waiver else "Excluded"},
-                    {"Item Description": "Paperless Direct Online Discount (-5%)", "Type": "Direct Discount", "Amount (₹)": f"-₹{calc['online_rebate']:,.2f}" if calc['online_rebate'] > 0 else "₹0.00"},
-                    {"Item Description": "Taxable Subtotal (Pre-Tax)", "Type": "Subtotal", "Amount (₹)": f"₹{calc['subtotal_annual']:,.2f}"},
-                    {"Item Description": "Government GST (18%)", "Type": "Statutory Tax", "Amount (₹)": f"₹{calc['gst_amount']:,.2f}"},
-                    {"Item Description": "⭐ Total Annual Premium Payable", "Type": "Final Total", "Amount (₹)": f"₹{calc['total_annual_premium']:,.2f}"}
-                ]
-                st.table(invoice_items)
-
-            with col_right:
-                st.subheader("📊 Premium Allocation")
-                # Native chart
-                chart_breakdown = {
-                    "Net Base Cover": calc['net_base_premium'],
-                    "Protection Riders": calc['rider_cost'],
-                    "GST (18%)": calc['gst_amount']
-                }
-                st.bar_chart(chart_breakdown)
-
-                # Official Policy Quote Reference Card
-                quote_date = datetime.date.today().strftime("%d-%B-%Y")
-                quote_ref = f"AGS-{age}{policy_term}-{abs(hash(applicant_name)) % 90000 + 10000}"
-                
-                st.markdown(f"""
-                <div style="background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 8px; padding: 14px; font-size: 0.85rem; margin-top: 10px;">
-                    <div style="font-weight: 700; color: #1E293B; margin-bottom: 6px;">📄 Official Policy Quote Card</div>
-                    <div><strong>Quote Ref:</strong> <code>{quote_ref}</code></div>
-                    <div><strong>Generated on:</strong> {quote_date}</div>
-                    <div><strong>Proposer:</strong> {applicant_name} ({gender}, Age {age})</div>
-                    <div><strong>Nominee Benefit:</strong> {sum_assured_labels[sum_assured]}</div>
-                    <div><strong>Duration:</strong> {policy_term} Years (Active till age {age + policy_term})</div>
-                    <div><strong>Payment Mode:</strong> {frequency.split(' (')[0]}</div>
-                </div>
-                """, unsafe_allow_html=True)
-
-                st.write("")
-
-                # Commercial CTA Buttons
-                col_btn1, col_btn2 = st.columns(2)
-                with col_btn1:
-                    if st.button("🚀 Buy Policy Now", type="primary", use_container_width=True):
-                        st.balloons()
-                        st.success(f"Thank you, {applicant_name}! Your application for {quote_ref} has been initiated. Our underwriter will call you at your registered mobile number for medical verification.")
-                with col_btn2:
-                    if st.button("📞 Request Callback", use_container_width=True):
-                        st.info("A licensed insurance advisor will contact you within 15 minutes.")
-
-                # Download Official Quotation Slip
-                quote_slip_content = f"""======================================================================
+        # Download Official Slip
+        quote_text = f"""======================================================================
                AEGIS SHIELD LIFE INSURANCE CO. LTD.
            (IRDAI Registration No. 142 | CIN: L66010MH2000PLC127837)
                       OFFICIAL QUOTATION SLIP
 ======================================================================
 Quote Reference     : {quote_ref}
-Quotation Date      : {quote_date}
 Proposer Name       : {applicant_name}
 Proposer Age / Sex  : {age} Years / {gender}
-Smoking Status      : {'Smoker / Nicotine User' if is_smoker else 'Non-Smoker (Standard Preferred)'}
-Annual Income Band  : {annual_income_options[annual_income]}
+Smoking Status      : {'Smoker' if is_smoker else 'Non-Smoker'}
 Plan Selected       : {policy_type}
 Sum Assured (Cover) : {sum_assured_labels[sum_assured]} (₹{sum_assured:,})
-Policy Duration     : {policy_term} Years (Coverage up to Age {age + policy_term})
+Policy Duration     : {policy_term} Years
 Payment Mode        : {frequency}
 ----------------------------------------------------------------------
-FINANCIAL PREMIUM BREAKDOWN:
-Base Plan Mortality : ₹{calc['base_premium']:,.2f}
-Age Factor ({calc['age_factor']}x)   : Included
-Tobacco Surcharge   : ₹{calc['smoker_loading']:,.2f}
-Female Longevity    : -₹{calc['gender_discount']:,.2f}
-Net Base Life Cover : ₹{calc['net_base_premium']:,.2f}
-Critical Illness 64 : ₹{calc['critical_illness_cost']:,.2f}
-Accidental Benefit  : ₹{calc['accidental_death_cost']:,.2f}
-Waiver of Premium   : ₹{calc['waiver_premium_cost']:,.2f}
-Direct Online (-5%) : -₹{calc['online_rebate']:,.2f}
-----------------------------------------------------------------------
-Pre-Tax Subtotal    : ₹{calc['subtotal_annual']:,.2f}
-Goods & Tax (GST 18): ₹{calc['gst_amount']:,.2f}
-TOTAL ANNUAL PREMIUM: ₹{calc['total_annual_premium']:,.2f}
-INSTALLMENT PAYABLE : ₹{calc['installment_premium']:,.2f}
-----------------------------------------------------------------------
-TAX ADVANTAGE:
-• Sec 80C Eligible  : Up to ₹1,50,000 tax deduction
-• Estimated Saving  : ₹{calc['tax_savings_estimate']:,.0f} per year
-• Sec 10(10D)       : All death payouts 100% Tax-Free
+Net Base Life Cover : ₹{primary_calc['net_base_premium']:,.2f}
+Protection Riders   : ₹{primary_calc['rider_cost']:,.2f}
+Online Discount     : -₹{primary_calc['online_rebate']:,.2f}
+Pre-Tax Subtotal    : ₹{primary_calc['subtotal_annual']:,.2f}
+Goods & Tax (GST 18): ₹{primary_calc['gst_amount']:,.2f}
+TOTAL ANNUAL PREMIUM: ₹{primary_calc['total_annual_premium']:,.2f}
+INSTALLMENT PAYABLE : ₹{primary_calc['installment_premium']:,.2f}
 ======================================================================
-Customer Support: 1800-266-7788 | support@aegisshieldlife.com
-Registered Office: Aegis Towers, Bandra-Kurla Complex, Mumbai 400051
-Disclaimer: Quotation generated for academic and demonstration purposes.
+Disclaimer: Computer generated quote for academic presentation.
 """
-                st.download_button(
-                    label="📥 Download Official Quote Slip (.txt)",
-                    data=quote_slip_content,
-                    file_name=f"Aegis_Shield_Quote_{applicant_name.replace(' ', '_')}_{quote_ref}.txt",
-                    mime="text/plain",
-                    use_container_width=True
-                )
-
-        except Exception as e:
-            st.error(f"Underwriting Engine Alert: {str(e)}")
-            st.info("Please verify the entered demographic values in the sidebar.")
+        st.download_button(
+            label="📥 Download Quote Slip (.txt)",
+            data=quote_text,
+            file_name=f"Quote_{quote_ref}.txt",
+            mime="text/plain",
+            use_container_width=True
+        )
 
 # -----------------------------------------------------------------------------
-# TAB 2: PLAN COMPARISON & FEATURES
+# TAB 2: MULTI-MEMBER FAMILY COVER (MULTI-TAB QUOTE WORKBENCH)
 # -----------------------------------------------------------------------------
-with tab_plans:
-    st.subheader("⚖️ Compare Aegis Shield Insurance Products")
-    st.markdown("Choose the right plan architecture depending on your family's financial horizon and life goals:")
+with tab_family:
+    st.subheader("👨‍👩‍👧 Multi-Member Family Shield Protection")
+    st.markdown("Configure and compare multiple family policies simultaneously across dedicated member tabs:")
 
-    comparison_data = [
+    # Sub-tabs for each family member
+    fam_tab1, fam_tab2, fam_tab3 = st.tabs([
+        "👤 Primary Insured (Self)",
+        "💍 Spouse Protection Plan",
+        "👶 Child Higher Education Plan"
+    ])
+
+    with fam_tab1:
+        st.markdown(f"**Primary Insured:** {applicant_name} (Age {age}, {gender})")
+        col_f1, col_f2, col_f3 = st.columns(3)
+        with col_f1:
+            st.metric("Primary Plan", "Term Life")
+        with col_f2:
+            st.metric("Coverage", sum_assured_labels[sum_assured])
+        with col_f3:
+            st.metric("Annual Premium", f"₹{primary_calc['total_annual_premium']:,.2f}")
+
+    with fam_tab2:
+        st.markdown("#### Configure Spouse Coverage")
+        col_sp1, col_sp2, col_sp3 = st.columns(3)
+        with col_sp1:
+            spouse_name = st.text_input("Spouse Legal Name", value="Pooja Sharma")
+            spouse_age = st.number_input("Spouse Age", min_value=18, max_value=60, value=27)
+        with col_sp2:
+            spouse_sum = st.selectbox("Spouse Sum Assured", [2500000, 5000000, 10000000], index=1, format_func=lambda x: f"₹{x/100000:.0f} Lakhs")
+            spouse_term = st.slider("Spouse Term", 10, 35, 25)
+        with col_sp3:
+            spouse_smoker = st.checkbox("Spouse Tobacco User", value=False)
+            spouse_plan = st.selectbox("Spouse Plan Type", list(BASE_RATES_PER_LAKH.keys()), index=0)
+
+        spouse_calc = calculate_insurance_premium(
+            policy_type=spouse_plan,
+            sum_assured=spouse_sum,
+            age=spouse_age,
+            policy_term=spouse_term,
+            gender="Female",
+            annual_income=600000,
+            is_smoker=spouse_smoker,
+            has_critical_illness=True,
+            has_accidental_death=False,
+            has_premium_waiver=False,
+            frequency="Annual Mode (1 payment/year - 0% Surcharge)",
+            direct_online_discount=True
+        )
+        st.success(f"💍 **Spouse Annual Premium (with 10% Female Longevity Discount):** ₹{spouse_calc['total_annual_premium']:,.2f} / year")
+
+    with fam_tab3:
+        st.markdown("#### Child Future Education Milestone Policy")
+        col_ch1, col_ch2, col_ch3 = st.columns(3)
+        with col_ch1:
+            child_name = st.text_input("Child Name", value="Aarav Sharma")
+            child_age = st.number_input("Child Age", min_value=0, max_value=17, value=4)
+        with col_ch2:
+            child_sum = st.selectbox("Education Corpus Goal", [1500000, 2500000, 5000000], index=1, format_func=lambda x: f"₹{x/100000:.0f} Lakhs")
+            child_term = 18 - child_age  # Reaches maturity at age 18
+        with col_ch3:
+            st.info(f"🎓 Policy matures at child's age 18 (in **{child_term} years**) for college admission.")
+
+        child_calc = calculate_insurance_premium(
+            policy_type="Smart Child Future Builder (Education Milestone)",
+            sum_assured=child_sum,
+            age=32,  # Parent age
+            policy_term=child_term,
+            gender="Male",
+            annual_income=1200000,
+            is_smoker=False,
+            has_critical_illness=True,
+            has_accidental_death=True,
+            has_premium_waiver=True,
+            frequency="Annual Mode (1 payment/year - 0% Surcharge)",
+            direct_online_discount=True
+        )
+        st.success(f"👶 **Child Future Annual Premium (with Full Premium Waiver Protection):** ₹{child_calc['total_annual_premium']:,.2f} / year")
+
+    st.write("---")
+    # Total Family Bundle
+    st.markdown("### 🏆 Combined Family Shield Package")
+    total_family_premium = primary_calc['total_annual_premium'] + spouse_calc['total_annual_premium'] + child_calc['total_annual_premium']
+    f_col1, f_col2, f_col3 = st.columns(3)
+    with f_col1:
+        st.metric("Total Family Annual Cost", f"₹{total_family_premium:,.2f}")
+    with f_col2:
+        st.metric("Combined Life Cover", f"₹{(sum_assured + spouse_sum + child_sum)/10000000:.2f} Crores")
+    with f_col3:
+        st.metric("Total 80C Tax Deduction", "₹1,50,000 (Max Limit)")
+
+# -----------------------------------------------------------------------------
+# TAB 3: PLAN COMPARISON MATRIX
+# -----------------------------------------------------------------------------
+with tab_compare:
+    st.subheader("⚖️ Side-by-Side Product Comparison")
+    st.markdown("Detailed breakdown of our 4 flagship insurance product categories:")
+
+    comparison_df = pd.DataFrame([
         {
-            "Product Name": "i-Protect Smart Term Life",
-            "Core Objective": "Pure Financial Defense",
-            "Maturity Returns": "Nil (Highest Payout / Lowest Premium)",
+            "Product Plan": "i-Protect Smart Term Life",
+            "Target Goal": "Pure Family Financial Defense",
+            "Maturity Proceeds": "Nil (Highest Protection / Lowest Cost)",
             "Death Payout": "100% Tax-Free Sum Assured",
-            "Ideal Candidate": "Salaried individuals, first-time home buyers, young parents",
-            "Tax Benefits": "Sec 80C & Sec 10(10D)"
+            "Best For": "Salaried employees, home loan borrowers",
+            "Tax Section": "Sec 80C & 10(10D)"
         },
         {
-            "Product Name": "Guaranteed Income Endowment",
-            "Core Objective": "Capital Preservation + Wealth",
-            "Maturity Returns": "Guaranteed Maturity Corpus + Reversionary Bonuses",
-            "Death Payout": "Higher of Sum Assured or 105% premiums paid",
-            "Ideal Candidate": "Conservative investors planning retirement or college funds",
-            "Tax Benefits": "Sec 80C & Sec 10(10D)"
+            "Product Plan": "Guaranteed Income Endowment",
+            "Target Goal": "Capital Protection + Guaranteed Wealth",
+            "Maturity Proceeds": "Guaranteed Corpus + Annual Bonuses",
+            "Death Payout": "Sum Assured or 105% premiums",
+            "Best For": "Risk-averse investors, retirement fund",
+            "Tax Section": "Sec 80C & 10(10D)"
         },
         {
-            "Product Name": "Century Whole Life Shield",
-            "Core Objective": "Lifelong Family Legacy",
-            "Maturity Returns": "Continues active till age 99 with cash value surrender",
-            "Death Payout": "Guaranteed inheritance transfer to grandchildren/heirs",
-            "Ideal Candidate": "HNI legacy planners, business succession architects",
-            "Tax Benefits": "Sec 80C & Sec 10(10D)"
+            "Product Plan": "Century Whole Life Shield",
+            "Target Goal": "Lifelong Heritage & Legacy Transfer",
+            "Maturity Proceeds": "Active coverage up to age 99",
+            "Death Payout": "Tax-free legacy inheritance to heirs",
+            "Best For": "High Net-Worth wealth transfer",
+            "Tax Section": "Sec 80C & 10(10D)"
         },
         {
-            "Product Name": "Smart Child Future Builder",
-            "Core Objective": "Child Higher Education",
-            "Maturity Returns": "Milestone payouts matching university admissions",
-            "Death Payout": "Immediate payout + all future premiums waived by insurer",
-            "Ideal Candidate": "Parents with children aged 0 to 12 years",
-            "Tax Benefits": "Sec 80C & Sec 10(10D)"
+            "Product Plan": "Smart Child Future Builder",
+            "Target Goal": "Secured College Education",
+            "Maturity Proceeds": "Milestone payouts matching admissions",
+            "Death Payout": "Immediate payout + all future premiums waived",
+            "Best For": "Parents of children aged 0-12 years",
+            "Tax Section": "Sec 80C & 10(10D)"
         }
+    ])
+    st.dataframe(comparison_df, use_container_width=True, hide_index=True)
+
+# -----------------------------------------------------------------------------
+# TAB 4: CASHLESS HOSPITAL NETWORK
+# -----------------------------------------------------------------------------
+with tab_hospitals:
+    st.subheader("🏥 Nationwide Cashless Hospital Directory")
+    st.markdown("Aegis Shield partners with **11,000+ accredited hospitals** across India for instant cashless claim settlement:")
+
+    filter_city = st.selectbox("Filter Partner Hospitals by Metro City", ["All Cities", "Mumbai", "Bengaluru", "Delhi NCR", "Hyderabad", "Chennai", "Kolkata"])
+    
+    hospital_data = [
+        {"Hospital Name": "Apollo Hospitals", "City": "Bengaluru", "Cashless Desk": "24x7 Available", "NABH Accredited": "Yes", "Avg Settlement": "45 Mins"},
+        {"Hospital Name": "Fortis Memorial Research Institute", "City": "Delhi NCR", "Cashless Desk": "24x7 Available", "NABH Accredited": "Yes", "Avg Settlement": "30 Mins"},
+        {"Hospital Name": "Tata Memorial & Kokilaben Ambani Hospital", "City": "Mumbai", "Cashless Desk": "24x7 Available", "NABH Accredited": "Yes", "Avg Settlement": "25 Mins"},
+        {"Hospital Name": "Manipal Hospital", "City": "Bengaluru", "Cashless Desk": "24x7 Available", "NABH Accredited": "Yes", "Avg Settlement": "35 Mins"},
+        {"Hospital Name": "Max Super Speciality Hospital", "City": "Delhi NCR", "Cashless Desk": "24x7 Available", "NABH Accredited": "Yes", "Avg Settlement": "40 Mins"},
+        {"Hospital Name": "Yashoda Hospitals", "City": "Hyderabad", "Cashless Desk": "24x7 Available", "NABH Accredited": "Yes", "Avg Settlement": "30 Mins"},
+        {"Hospital Name": "MIOT International", "City": "Chennai", "Cashless Desk": "24x7 Available", "NABH Accredited": "Yes", "Avg Settlement": "45 Mins"}
     ]
-    st.table(comparison_data)
+    
+    if filter_city != "All Cities":
+        hospital_data = [h for h in hospital_data if h["City"] == filter_city]
+    
+    st.table(hospital_data)
+
+# -----------------------------------------------------------------------------
+# TAB 5: CLAIMS & TRUST CENTER
+# -----------------------------------------------------------------------------
+with tab_claims:
+    st.subheader("🛡️ Industry-Leading Claim Settlement Performance")
+    st.markdown("Why over **2.8 Crore Indian families** trust Aegis Shield Life:")
+
+    cl_c1, cl_c2, cl_c3, cl_c4 = st.columns(4)
+    with cl_c1:
+        st.metric("Claim Settlement Ratio", "99.34%", "+0.4% YoY")
+    with cl_c2:
+        st.metric("Claims Paid Amount", "₹14,200 Cr", "Last 5 Years")
+    with cl_c3:
+        st.metric("Express Claim Clock", "3 Hours", "For claims under ₹50L")
+    with cl_c4:
+        st.metric("Solvency Ratio", "2.15x", "IRDAI min: 1.50x")
 
     st.write("")
-    st.subheader("🛡️ Core Pillars of Life Insurance Security")
-    p1, p2, p3 = st.columns(3)
-    with p1:
-        st.markdown("#### 🔒 Immediate Debt Protection")
-        st.write("Wipes out liabilities like home mortgages, vehicle loans, and credit debts so your family is never burdened.")
-    with p2:
-        st.markdown("#### 📈 Guaranteed Future Wealth")
-        st.write("Disciplined annual compounding guarantees funds for university fees and family milestones regardless of market downturns.")
-    with p3:
-        st.markdown("#### ⚖️ Sovereign Tax Shield")
-        st.write("Deduct up to ₹1.5 Lakhs every year under Section 80C. Claims and maturity proceeds are exempt under Section 10(10D).")
-
-# -----------------------------------------------------------------------------
-# TAB 3: CUSTOMER REVIEWS & TRUST
-# -----------------------------------------------------------------------------
-with tab_reviews:
-    st.subheader("⭐ What Our Policyholders Say")
-    st.markdown("Over **2.8 Crore families** trust Aegis Shield for life protection.")
-
-    r1, r2, r3 = st.columns(3)
-    with r1:
+    st.markdown("### 📋 3-Step Hassle-Free Digital Claim Process")
+    step_col1, step_col2, step_col3 = st.columns(3)
+    with step_col1:
         st.markdown("""
-        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 16px; border-radius: 8px;">
-            <div style="color: #F59E0B; font-size: 1rem; margin-bottom: 6px;">★★★★★</div>
-            <p style="font-size: 0.88rem; color: #334155; font-style: italic;">
-                "Got my 1 Crore term cover in under 15 minutes! The transparent breakdown showed me exactly how my smoking status affected the premium. No hidden costs."
-            </p>
-            <div style="font-weight: 700; font-size: 0.85rem; color: #0F172A;">Vikramaditya Rao</div>
-            <div style="font-size: 0.75rem; color: #64748B;">Senior Tech Lead, Bengaluru</div>
+        <div class="sleek-card">
+            <h4>1. Online Intimation</h4>
+            <p style="font-size: 0.85rem; color: #64748B;">Upload death certificate or hospital discharge summary on our portal or WhatsApp 1800-266-7788.</p>
         </div>
         """, unsafe_allow_html=True)
-    with r2:
+    with step_col2:
         st.markdown("""
-        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 16px; border-radius: 8px;">
-            <div style="color: #F59E0B; font-size: 1rem; margin-bottom: 6px;">★★★★★</div>
-            <p style="font-size: 0.88rem; color: #334155; font-style: italic;">
-                "The 3-hour claim settlement guarantee gave our family peace of mind. Truly professional and the instant quotation slip was clear."
-            </p>
-            <div style="font-weight: 700; font-size: 0.85rem; color: #0F172A;">Priya Sundaram</div>
-            <div style="font-size: 0.75rem; color: #64748B;">Chartered Accountant, Mumbai</div>
+        <div class="sleek-card">
+            <h4>2. Dedicated Claim Manager</h4>
+            <p style="font-size: 0.85rem; color: #64748B;">A personal relationship officer is assigned to handle your case with zero paperwork hassle.</p>
         </div>
         """, unsafe_allow_html=True)
-    with r3:
+    with step_col3:
         st.markdown("""
-        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 16px; border-radius: 8px;">
-            <div style="color: #F59E0B; font-size: 1rem; margin-bottom: 6px;">★★★★★</div>
-            <p style="font-size: 0.88rem; color: #334155; font-style: italic;">
-                "I compared 4 other companies and Aegis Shield gave the most detailed actuarial view. The female longevity discount was an awesome benefit."
-            </p>
-            <div style="font-weight: 700; font-size: 0.85rem; color: #0F172A;">Ananya Banerjee</div>
-            <div style="font-size: 0.75rem; color: #64748B;">Marketing Director, New Delhi</div>
+        <div class="sleek-card">
+            <h4>3. Instant NEFT Transfer</h4>
+            <p style="font-size: 0.85rem; color: #64748B;">Approved sum assured is credited directly to the nominee's verified bank account in 3 hours.</p>
         </div>
         """, unsafe_allow_html=True)
 
-    st.write("")
-    st.subheader("🛡️ IRDAI Regulatory Disclosures & Compliance")
-    st.info("""
-    **Statutory Warning:** Insurance is the subject matter of solicitation. Please read sales brochure and policy wording carefully before concluding a sale.  
-    **IRDAI Registration No.:** 142 • **CIN:** L66010MH2000PLC127837 • **Grievance Redressal Officer:** complaints@aegisshieldlife.com • Toll Free: 1800-266-7788.
-    """)
-
 # -----------------------------------------------------------------------------
-# TAB 4: ACADEMIC PROJECT & PYTHON LOGIC (EVALUATION GUIDE)
+# TAB 6: ACADEMIC PROJECT & PYTHON ENGINE
 # -----------------------------------------------------------------------------
 with tab_academic:
-    st.subheader("🎓 Coursework Information: Python Programming for Business Students")
+    st.subheader("🎓 Coursework Evaluation: Python Programming for Business Students")
     st.markdown("""
-    This section is designed for the academic evaluator to demonstrate how Python fundamentals solve this business challenge.
+    This section provides the academic evaluator with a comprehensive defense of how Python logic, arithmetic, and data structures power this application.
     """)
 
-    with st.expander("📖 1. Business Problem & Solution Summary"):
+    with st.expander("📖 1. Business Problem & Solution Architecture"):
         st.markdown("""
-        - **Business Idea Selected:** Idea #16 (Insurance - Premium Estimator)
-        - **Problem Solved:** Overcomes opaque pricing, hidden surcharges, and customer cart abandonment in digital insurance by providing an instantaneous, interactive, self-service quotation engine.
-        - **Target Customer:** Salaried professionals, young parents, and business owners needing reliable life coverage.
+        - **Business Idea Selected:** Idea #16 (Insurance - Life Insurance Premium Estimator)
+        - **Problem Solved:** Eliminates cognitive overload and deceptive pricing in digital life insurance through transparent, self-service quotation tools.
+        - **Target Customer:** Salaried professionals, young parents, and business owners seeking reliable term and wealth protection.
         """)
 
-    with st.expander("💻 2. Python Concepts Applied (Rubric Alignment)"):
+    with st.expander("💻 2. Python Concepts Applied (Evaluation Rubric)"):
         st.markdown("""
-        | Python Concept | Where & How Used in this Project |
+        | Concept | Implementation in this Application |
         |---|---|
-        | **Variables & Data Types** | `int` (Age, Term, Income), `float` (GST, Premium), `str` (Names, Plans), `bool` (Smoker, Riders) |
+        | **Variables & Types** | `int` (Age, Term, Income), `float` (GST, Rates, Premiums), `str` (Names, Plans), `bool` (Smoker, Riders) |
         | **Dictionaries** | `BASE_RATES_PER_LAKH`, `FREQUENCY_FACTORS`, `PLAN_TAGLINES`, `PLAN_SUMMARIES` |
-        | **Conditional Logic (`if/elif/else`)** | Actuarial age brackets, tobacco surcharges, female discount, and boundary validation |
-        | **Arithmetic Operations** | Multipliers, rider summing, subtotal discounts, 18% GST calculation, modal division |
-        | **Functions & Docstrings** | `calculate_insurance_premium(...)` encapsulating business algorithms with type hints |
-        | **Input Widgets (10 widgets)** | `text_input`, `number_input`, `radio`, `selectbox`, `select_slider`, `slider`, `checkbox` |
-        | **Error Handling** | Bound checking (`min_value`, `max_value`), tenure capping, and `try-except` wrappers |
+        | **Conditional Logic** | `if/elif/else` controlling age band multipliers, smoking penalties, female longevity discounts |
+        | **Functions & Return Structures** | `calculate_insurance_premium(...)` returning clean structured metric dictionaries |
+        | **Multi-Tab GUI** | `st.tabs` segmented controls powering 6 sleek modules and sub-tabs |
+        | **Error Handling** | Bound checking, slider auto-capping (`max_allowable_term = min(40, 75 - age)`), and `try/except` wrappers |
         """)
 
-    with st.expander("📐 3. Mathematical Formulae"):
+    with st.expander("📐 3. Mathematical Equations"):
         st.markdown(r"""
-        $$\text{Base Premium} = \left(\frac{\text{Sum Assured}}{100,000}\right) \times \text{Base Plan Rate}$$
-        $$\text{Adjusted Base} = \text{Base Premium} \times \text{Age Multiplier} + \text{Smoker Loading} (40\%) - \text{Female Discount} (10\%)$$
-        $$\text{Subtotal} = \text{Adjusted Base} + \sum \text{Riders} - \text{Direct Online Discount} (5\%)$$
-        $$\text{Total Annual Premium} = \text{Subtotal} + (\text{Subtotal} \times 0.18_{\text{GST}})$$
-        $$\text{Installment Premium} = \text{Total Annual Premium} \times \text{Frequency Factor}$$
+        $$\text{Base Premium} = \left(\frac{\text{Sum Assured}}{100,000}\right) \times \text{Base Rate}$$
+        $$\text{Net Base} = (\text{Base} \times \text{Age Factor} + \text{Smoker Loading} - \text{Female Discount}) \times \text{Term Factor}$$
+        $$\text{Subtotal} = \text{Net Base} + \sum \text{Riders} - \text{Direct Online Discount}$$
+        $$\text{Total Annual Premium} = \text{Subtotal} \times 1.18_{\text{GST}}$$
+        $$\text{Installment} = \text{Total Annual Premium} \times \text{Frequency Factor}$$
         """)
 
 # -----------------------------------------------------------------------------
-# CORPORATE FOOTER
+# SLEEK CORPORATE FOOTER
 # -----------------------------------------------------------------------------
 st.markdown("---")
 st.markdown("""
-<div style="text-align: center; color: #64748B; font-size: 0.82rem; padding: 10px;">
-    © 2026 Aegis Shield Life Insurance Company Limited. All Rights Reserved. | IRDAI Regn. No. 142<br>
-    <em>Academic Submission: End-Term Project & Assignment 2 • Python Programming for Business Students</em>
+<div style="text-align: center; color: #64748B; font-size: 0.82rem; padding: 12px;">
+    © 2026 Aegis Shield Life Insurance Company Limited • IRDAI Registration No. 142<br>
+    <em>End-Term Project & Assignment 2 • Course: Python Programming for Business Students</em>
 </div>
 """, unsafe_allow_html=True)
+
