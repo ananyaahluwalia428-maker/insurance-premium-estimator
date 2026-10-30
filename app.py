@@ -25,7 +25,7 @@ st.markdown("""
     
     html, body, [class*="css"] {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        color: #E4D7C6;
+        color: #F7F1E2;
     }
 
     /* ---------------------------------------------------------
